@@ -6,7 +6,7 @@ GroupInfoTableModel::GroupInfoTableModel(TargetGroup *g, QObject *parent) :
     QAbstractTableModel(parent), grp(g), timer(this)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(updateTable()));
-    timer.start(1000);
+    timer.start(500);
 }
 
 
@@ -28,7 +28,7 @@ int GroupInfoTableModel::rowCount(const QModelIndex &parent) const
 
 int GroupInfoTableModel::columnCount(const QModelIndex &parent) const
 {
-    return 13;
+    return 12;
 }
 
 QVariant GroupInfoTableModel::data(const QModelIndex &index, int role) const

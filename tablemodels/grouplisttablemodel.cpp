@@ -50,6 +50,7 @@ QVariant GroupListTableModel::data(const QModelIndex &index, int role) const
             for (int i = 0; i < targetCount; ++i) {
                 tmp.append(QString("T%1").arg(grp->getTarget(i)->getID()));
                 tmp.append(" ");
+                //if ((i + 1) % 10 == 0) tmp.append("\n");
             }
             return tmp;
 

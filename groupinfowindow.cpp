@@ -1,5 +1,8 @@
 #include "groupinfowindow.h"
 #include "ui_groupinfowindow.h"
+#include "targetinfowindow.h"
+#include "model/singletarget.h"
+#include <QDebug>
 
 GroupInfoWindow::GroupInfoWindow(TargetGroup *g, QWidget *parent) :
     QMainWindow(parent), grp(g),
@@ -18,11 +21,8 @@ GroupInfoWindow::GroupInfoWindow(TargetGroup *g, QWidget *parent) :
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
     table->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    // 自适应数据大小
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
-
     connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateTable()));
+    connect(table, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(rowDoubleClicket(QModelIndex)));
 }
 
 GroupInfoWindow::~GroupInfoWindow()
@@ -32,10 +32,18 @@ GroupInfoWindow::~GroupInfoWindow()
 
 void GroupInfoWindow::updateTable()
 {
-    // 自适应数据大小
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
     for (int i = 0; i < model->columnCount(QModelIndex()) ; ++i) {
         table->horizontalHeader()->setResizeMode(i, QHeaderView::Stretch);
     }
+}
+
+void GroupInfoWindow::rowDoubleClicket(const QModelIndex &index)
+{
+    int row = index.row();
+    qDebug() << "double clicked row:" << row;
+    if (row >= grp->getTargetCount()) return;
+
+    SingleTarget *t = grp->getTarget(row);
+    TargetInfoWindow *tWin = new TargetInfoWindow(t, this);
+    tWin->setVisible(true);
 }

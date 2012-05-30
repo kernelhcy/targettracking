@@ -19,6 +19,7 @@ public:
     
 public slots:
     void updateTable();
+    void rowDoubleClicket(const QModelIndex &index);
 
 private:
     Ui::GroupInfoWindow *ui;

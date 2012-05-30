@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     grouplistwindow.cpp \
     groupinfowindow.cpp \
     tablemodels/grouplisttablemodel.cpp \
-    tablemodels/groupinfotablemodel.cpp
+    tablemodels/groupinfotablemodel.cpp \
+    targetinfowindow.cpp \
+    tablemodels/targetinfotablemodel.cpp
 
 HEADERS  += mainwindow.h \
     ttmap.h \
@@ -48,9 +50,12 @@ HEADERS  += mainwindow.h \
     grouplistwindow.h \
     groupinfowindow.h \
     tablemodels/grouplisttablemodel.h \
-    tablemodels/groupinfotablemodel.h
+    tablemodels/groupinfotablemodel.h \
+    targetinfowindow.h \
+    tablemodels/targetinfotablemodel.h
 
 FORMS    += mainwindow.ui \
     settingdialog.ui \
     grouplistwindow.ui \
-    groupinfowindow.ui
+    groupinfowindow.ui \
+    targetinfowindow.ui

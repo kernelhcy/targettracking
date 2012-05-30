@@ -28,8 +28,6 @@ GroupListWindow::GroupListWindow(QWidget *parent) :
     table->resizeRowsToContents();
 
     connect(table, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(rowDoubleClicket(QModelIndex)));
-
-
 }
 
 GroupListWindow::~GroupListWindow()
@@ -44,6 +42,6 @@ void GroupListWindow::rowDoubleClicket(const QModelIndex &index)
     if (row >= g_groups->size()) return;
 
     TargetGroup *grp = g_groups->at(row);
-    GroupInfoWindow *infoWin = new GroupInfoWindow(grp);
+    GroupInfoWindow *infoWin = new GroupInfoWindow(grp, this);
     infoWin->setVisible(true);
 }
