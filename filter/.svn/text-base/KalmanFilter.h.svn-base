@@ -1,0 +1,183 @@
+// kalmanfilter.h
+//  
+
+#ifndef __KALMAN_FILTER__
+#define __KALMAN_FILTER__
+
+/** 
+KalmanFilter类，为卡尔曼滤波算法基类
+*/
+
+#include "matlib.h"
+#include "..\model\MeasureModel.h"
+#include "..\model\SystemModel.h"
+#include <iostream.h>
+
+class KalmanFilter
+{
+protected:
+
+public:
+	/// 构造函数
+	KalmanFilter();
+	KalmanFilter(SystemModel sm, MeasureModel mm);
+
+	/// 析构函数
+	virtual ~KalmanFilter();
+
+	SystemModel getSystemModel();
+
+	MeasureModel getMeasureModel();
+
+	/// 更新模型
+	void UpdateModel(SystemModel sm, MeasureModel mm);
+
+	/// 一步状态预测值
+	Matrix PriorEstimate(Matrix state);
+
+	/// 一步均方误差预测值
+	Matrix PriorCovariance(Matrix covariance);
+
+	/// 滤波增益
+	Matrix CalculateGain(Matrix covariance);
+
+	Matrix CalculateGain(Matrix innoCovariance,Matrix preCovariance);
+
+	/// 状态预测值
+	Matrix PostEstimate(Matrix gain, Matrix state, Matrix measure);
+
+	/// 均方误差预测值
+	Matrix PostCovariance(Matrix gain, Matrix covariance);
+
+	Matrix InnovationCovariance(Matrix covariance);
+
+	///量测预测值
+	Matrix PreMeasurement(Matrix preState);
+
+private:
+	SystemModel systemModel;
+	MeasureModel measureModel;
+
+}; // class
+
+KalmanFilter::KalmanFilter()
+{
+	
+}
+
+KalmanFilter::KalmanFilter(SystemModel sm, MeasureModel mm)
+{
+	systemModel.SetF(sm.GetF());
+	systemModel.SetQ(sm.GetQ());
+	measureModel.SetH(mm.GetH());
+	measureModel.SetR(mm.GetR());
+}
+
+KalmanFilter::~KalmanFilter()
+{
+
+}
+
+SystemModel KalmanFilter::getSystemModel()
+{
+	return systemModel;
+}
+
+MeasureModel KalmanFilter::getMeasureModel()
+{
+	return measureModel;
+}
+
+void KalmanFilter::UpdateModel(SystemModel sm, MeasureModel mm)
+{
+	systemModel.SetF(sm.GetF());
+	systemModel.SetQ(sm.GetQ());
+	measureModel.SetH(mm.GetH());
+	measureModel.SetR(mm.GetR());
+}
+
+Matrix KalmanFilter::PriorEstimate(Matrix state)
+{
+	if(systemModel.GetF().cols() != state.rows())
+	{
+		cerr <<"Matrix not match, can't multiply"<<endl;
+	}
+	state = systemModel.GetF() * state;
+	return state;
+}
+
+Matrix KalmanFilter::PriorCovariance(Matrix covariance)
+{
+	if(systemModel.GetF().cols() != covariance.rows())
+	{
+		cerr <<"Matrix not match, can't multiply"<<endl;
+	}
+	covariance = systemModel.GetF() * covariance * transpose(systemModel.GetF()) 
+								+ systemModel.GetQ();
+	return covariance;
+}
+
+Matrix KalmanFilter::InnovationCovariance(Matrix covariance)
+{
+	covariance = measureModel.GetH() * covariance * transpose(measureModel.GetH()) 
+								+ measureModel.GetR(); //R是否时变
+	return covariance;
+}
+
+Matrix KalmanFilter::CalculateGain(Matrix covariance)
+{
+	if(measureModel.GetH().cols() != covariance.rows())
+	{
+		cerr <<"Matrix not match, can't multiply"<<endl;
+	}
+	Matrix gain = (covariance * transpose(measureModel.GetH()))
+					/(measureModel.GetH() * covariance * transpose(measureModel.GetH()) 
+								+ measureModel.GetR());
+	return gain;
+}
+
+Matrix KalmanFilter::CalculateGain(Matrix innoCovariance,Matrix preCovariance)
+{
+	//if(measureModel.GetH().cols() != innoCovariance.rows())
+	//{
+	//	cerr <<"Matrix not match, can't multiply"<<endl;
+	//}
+	//Matrix gain = (covariance * transpose(measureModel.GetH()))
+	//					/(measureModel.GetH() * covariance * transpose(measureModel.GetH()) 
+	//								+ measureModel.GetR());
+	Matrix gain = preCovariance * transpose(measureModel.GetH()) / innoCovariance;
+	return gain;
+}
+
+Matrix KalmanFilter::PreMeasurement(Matrix preState)
+{
+	return measureModel.GetH() * preState;
+}
+
+Matrix KalmanFilter::PostEstimate(Matrix gain, Matrix state, Matrix measure)
+{
+	state = state + gain * (measure - measureModel.GetH() * state);
+	return state;
+}
+
+Matrix KalmanFilter::PostCovariance(Matrix gain, Matrix covariance)
+{
+	if( gain.cols() != measureModel.GetH().rows())
+	{
+		cerr <<"Matrix not match! can't multiply"<<endl;
+	}
+
+	Matrix I;
+	I=zeros(gain.rows(),gain.rows());
+	for(int i=1;i<=gain.rows();i++)
+		for(int j=1;j<=gain.rows();j++)
+		{
+			I.r(i,j)=0.0;
+			if(i==j)
+				I.r(i,j)=1.0;
+		}
+		covariance = (I - gain * measureModel.GetH()) * covariance;
+		return covariance;
+}
+
+#endif // __KALMAN_FILTER__
