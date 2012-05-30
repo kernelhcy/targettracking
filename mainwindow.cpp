@@ -51,7 +51,7 @@ void MainWindow::onStartButtonToggled(bool toggled)
 void MainWindow::onGroupInfoButtonClick()
 {
     if (grpInfoWindow == NULL) {
-        grpInfoWindow = new GroupInfoWindow(this);
+        grpInfoWindow = new GroupListWindow(this);
     }
     grpInfoWindow->show();
 }

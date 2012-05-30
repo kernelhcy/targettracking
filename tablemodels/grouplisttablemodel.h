@@ -7,11 +7,11 @@
 //
 // 集群信息表所对应的model
 //
-class GroupInfoTableModel : public QAbstractTableModel
+class GroupListTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit GroupInfoTableModel(QObject *parent = 0);
+    explicit GroupListTableModel(QObject *parent = 0);
     
     // 设置集群信息
     void setGroupInfos(std::vector<TargetGroup*> *grps);

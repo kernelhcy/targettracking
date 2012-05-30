@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GroupInfoWindow</class>
- <widget class="QMainWindow" name="GroupInfoWindow">
+ <class>GroupListWindow</class>
+ <widget class="QMainWindow" name="GroupListWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,9 +11,15 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>集群详细信息</string>
+   <string>集群列表信息</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QTableView" name="tableView"/>

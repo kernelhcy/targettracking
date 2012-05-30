@@ -1,27 +1,27 @@
 #include "groupinfotablemodel.h"
 
-GroupInfoTableModel::GroupInfoTableModel(QObject *parent) :
+GroupListTableModel::GroupListTableModel(QObject *parent) :
     QAbstractTableModel(parent), groups(NULL)
 {
 }
 
-int GroupInfoTableModel::rowCount(const QModelIndex &parent) const
+int GroupListTableModel::rowCount(const QModelIndex &parent) const
 {
     if (groups == NULL) return 0;
     return groups->size();
 }
 
-int GroupInfoTableModel::columnCount(const QModelIndex &parent) const
+int GroupListTableModel::columnCount(const QModelIndex &parent) const
 {
     return 3;
 }
 
-void GroupInfoTableModel::setGroupInfos(std::vector<TargetGroup*> *grps)
+void GroupListTableModel::setGroupInfos(std::vector<TargetGroup*> *grps)
 {
     groups = grps;
 }
 
-QVariant GroupInfoTableModel::data(const QModelIndex &index, int role) const
+QVariant GroupListTableModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) return QVariant();
     if (role == Qt::TextAlignmentRole) {
@@ -58,7 +58,7 @@ QVariant GroupInfoTableModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant GroupInfoTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant GroupListTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     static QString headers[3] = {"编号", "包含目标数", "包含目标编号"};
     if (role != Qt::DisplayRole) return QVariant();

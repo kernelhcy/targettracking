@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QTableView>
-#include "tablemodels/groupinfotablemodel.h"
+#include "model/TargetGroup.h"
 
 namespace Ui {
 class GroupInfoWindow;
@@ -14,16 +14,13 @@ class GroupInfoWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit GroupInfoWindow(QWidget *parent = 0);
+    explicit GroupInfoWindow(TargetGroup *grp, QWidget *parent = 0);
     ~GroupInfoWindow();
     
-public slots:
-    void rowDoubleClicket(const QModelIndex& index);    // 双击行
-
 private:
     Ui::GroupInfoWindow *ui;
+    TargetGroup *grp;
     QTableView *table;
-    GroupInfoTableModel *model;
 };
 
 #endif // GROUPINFOWINDOW_H

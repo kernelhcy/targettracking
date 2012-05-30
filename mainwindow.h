@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "settingdialog.h"
-#include "groupinfowindow.h"
+#include "grouplistwindow.h"
 #include "ttmap.h"
 
 namespace Ui {
@@ -25,7 +25,7 @@ private:
     Ui::MainWindow *ui;
 
     SettingDialog *settingDialog;
-    GroupInfoWindow *grpInfoWindow;
+    GroupListWindow *grpInfoWindow;
     TTMap *map;
 };
 

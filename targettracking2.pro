@@ -21,11 +21,12 @@ SOURCES += main.cpp\
     model/MeasureModel.cpp \
     comm.cpp \
     model/singletarget.cpp \
-    groupinfowindow.cpp \
     datasource/targetgenerator.cpp \
     view/singletargetview.cpp \
     view/targetgroupview.cpp \
-    tablemodels/groupinfotablemodel.cpp
+    tablemodels/groupinfotablemodel.cpp \
+    grouplistwindow.cpp \
+    groupinfowindow.cpp
 
 HEADERS  += mainwindow.h \
     ttmap.h \
@@ -38,14 +39,16 @@ HEADERS  += mainwindow.h \
     comm.h \
     matrixtcl/cmatrix \
     model/singletarget.h \
-    groupinfowindow.h \
     datasource/targetgenerator.h \
     view/singletargetview.h \
     view/targetgroupview.h \
     filter/KalmanFilter.h \
     filter/IMMFilter.h \
-    tablemodels/groupinfotablemodel.h
+    grouplistwindow.h \
+    groupinfowindow.h \
+    tablemodels/grouplisttablemodel.h
 
 FORMS    += mainwindow.ui \
     settingdialog.ui \
+    grouplistwindow.ui \
     groupinfowindow.ui
