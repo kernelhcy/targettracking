@@ -1,66 +1,79 @@
 #include "groupinfotablemodel.h"
+#include "model/singletarget.h"
+#include "model/State.h"
 
-GroupListTableModel::GroupListTableModel(QObject *parent) :
-    QAbstractTableModel(parent), groups(NULL)
+GroupInfoTableModel::GroupInfoTableModel(TargetGroup *g, QObject *parent) :
+    QAbstractTableModel(parent), grp(g), timer(this)
 {
+    connect(&timer, SIGNAL(timeout()), this, SLOT(updateTable()));
+    timer.start(1000);
 }
 
-int GroupListTableModel::rowCount(const QModelIndex &parent) const
+
+// 定时刷新数据
+void GroupInfoTableModel::updateTable()
 {
-    if (groups == NULL) return 0;
-    return groups->size();
+    emit dataChanged(this->index(0, 0), this->index(grp->getTargetCount(), 13));
 }
 
-int GroupListTableModel::columnCount(const QModelIndex &parent) const
+void GroupInfoTableModel::setGroup(TargetGroup *grp)
 {
-    return 3;
+    this->grp = grp;
 }
 
-void GroupListTableModel::setGroupInfos(std::vector<TargetGroup*> *grps)
+int GroupInfoTableModel::rowCount(const QModelIndex &parent) const
 {
-    groups = grps;
+    return grp->getTargetCount();
 }
 
-QVariant GroupListTableModel::data(const QModelIndex &index, int role) const
+int GroupInfoTableModel::columnCount(const QModelIndex &parent) const
+{
+    return 13;
+}
+
+QVariant GroupInfoTableModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) return QVariant();
     if (role == Qt::TextAlignmentRole) {
-        switch(index.column())
-        {
-        case 0:
-        case 1:
-            return int(Qt::AlignCenter | Qt::AlignVCenter);
-        case 2:
-            return int(Qt::AlignLeft | Qt::AlignVCenter);
-        case 3:
-            break;
-        }
-
+        return int(Qt::AlignCenter | Qt::AlignVCenter);
     } else if (role == Qt::DisplayRole) {
-        TargetGroup *grp = groups->at(index.row());
+        SingleTarget *t = grp->getTarget(index.row());
         switch(index.column())
         {
         case 0:
-            return QString("G%1").arg(grp->getID());
+            return QString("T%1").arg(t->getID());
         case 1:
-            return QString("%1").arg(grp->getTargetCount());
+            return QString("G%1").arg(grp->getID());
         case 2:
-            QString tmp;
-            int targetCount = grp->getTargetCount();
-            for (int i = 0; i < targetCount; ++i) {
-                tmp.append(QString("T%1").arg(grp->getTarget(i)->getID()));
-                tmp.append(" ");
-            }
-            return tmp;
-
+            return QString("%1").arg(t->getCurrState()->getTime());
+        case 3:
+            return QString("%1").arg(t->getCurrState()->getPositionX());
+        case 4:
+            return QString("%1").arg(t->getCurrState()->getPositionY());
+        case 5:
+            return QString("%1").arg(t->getCurrState()->getPositionZ());
+        case 6:
+            return QString("%1").arg(t->getCurrState()->getSpeedX());
+        case 7:
+            return QString("%1").arg(t->getCurrState()->getSpeedY());
+        case 8:
+            return QString("%1").arg(t->getCurrState()->getSpeedZ());
+        case 9:
+            return QString("%1").arg(t->getCurrState()->getAcceleratinX());
+        case 10:
+            return QString("%1").arg(t->getCurrState()->getAcceleratinY());
+        case 11:
+            return QString("%1").arg(t->getCurrState()->getAcceleratinZ());
+        case 12:
+            return QString("%1").arg(t->getCurrState()->getTime());
         }
     }
     return QVariant();
 }
 
-QVariant GroupListTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant GroupInfoTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    static QString headers[3] = {"编号", "包含目标数", "包含目标编号"};
+    static QString headers[] = {"编号", "集群编号", "t", "sx", "sy", "sz", "vx", "vy", "vz", "ax", "ay", "az", "空/地"};
     if (role != Qt::DisplayRole) return QVariant();
     if (orientation != Qt::Horizontal) return QVariant();
     return headers[section];

@@ -24,9 +24,10 @@ SOURCES += main.cpp\
     datasource/targetgenerator.cpp \
     view/singletargetview.cpp \
     view/targetgroupview.cpp \
-    tablemodels/groupinfotablemodel.cpp \
     grouplistwindow.cpp \
-    groupinfowindow.cpp
+    groupinfowindow.cpp \
+    tablemodels/grouplisttablemodel.cpp \
+    tablemodels/groupinfotablemodel.cpp
 
 HEADERS  += mainwindow.h \
     ttmap.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     filter/IMMFilter.h \
     grouplistwindow.h \
     groupinfowindow.h \
-    tablemodels/grouplisttablemodel.h
+    tablemodels/grouplisttablemodel.h \
+    tablemodels/groupinfotablemodel.h
 
 FORMS    += mainwindow.ui \
     settingdialog.ui \

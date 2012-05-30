@@ -1,20 +1,18 @@
-#ifndef GROUPLISTTABLEMODEL_H
-#define GROUPLISTTABLEMODEL_H
+#ifndef GROUPINFOTABLEMODEL_H
+#define GROUPINFOTABLEMODEL_H
 
 #include <QAbstractTableModel>
-#include <vector>
 #include "../model/TargetGroup.h"
-//
-// 集群信息表所对应的model
-//
-class GroupListTableModel : public QAbstractTableModel
+#include <QTimer>
+
+class GroupInfoTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit GroupListTableModel(QObject *parent = 0);
+    explicit GroupInfoTableModel(TargetGroup *grp, QObject *parent = 0);
     
     // 设置集群信息
-    void setGroupInfos(std::vector<TargetGroup*> *grps);
+    void setGroup(TargetGroup *grp);
 
     // 获取行和列数
     int rowCount(const QModelIndex &parent) const;
@@ -25,7 +23,10 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 private:
-    std::vector<TargetGroup*> *groups;
+    TargetGroup *grp;
+    QTimer timer;
+public slots:
+    void updateTable();
 };
 
-#endif // GROUPLISTTABLEMODEL_H
+#endif // GROUPINFOTABLEMODEL_H
