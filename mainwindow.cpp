@@ -46,12 +46,12 @@ void MainWindow::onStartButtonToggled(bool toggled)
         map->stop();
         qDebug() << "停止跟踪。";
     }
+    if (grpInfoWindow != NULL) grpInfoWindow->updateTable();
 }
 
 void MainWindow::onGroupInfoButtonClick()
 {
-    if (grpInfoWindow == NULL) {
-        grpInfoWindow = new GroupListWindow(this);
-    }
+    if (grpInfoWindow == NULL) grpInfoWindow = new GroupListWindow(this);
     grpInfoWindow->show();
+    grpInfoWindow->updateTable();
 }

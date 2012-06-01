@@ -16,3 +16,4 @@ void printf_matrix(const Matrix &m)
 }
 
 std::vector<TargetGroup*> *g_groups = NULL;
+bool isTracking = false;

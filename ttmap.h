@@ -22,8 +22,6 @@ public:
     const static int WIDTH = 10000;
     const static int HEIGHT = 10000;
 
-signals:
-    
 public slots:
     // 开始跟踪
     void start();

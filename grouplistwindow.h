@@ -16,6 +16,7 @@ class GroupListWindow : public QMainWindow
 public:
     explicit GroupListWindow(QWidget *parent = 0);
     ~GroupListWindow();
+    void updateTable();
     
 public slots:
     void rowDoubleClicket(const QModelIndex& index);    // 双击行

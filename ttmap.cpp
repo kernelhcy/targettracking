@@ -20,14 +20,6 @@ void TTMap::start()
     qDebug() << "group number:" << groupNumber;
     qDebug() << "group target number:" << targetNumber;
 
-    // 清除旧数据
-    QListIterator<TargetGroupView*> i(views);
-    while (i.hasNext()) {
-        delete i.next();
-    }
-    views.clear();
-    update();
-
     targetGenerator = new TargetGenerator(groupNumber, targetNumber);
     std::vector<TargetGroup*> *groups = targetGenerator->getGroups();
     std::vector<TargetGroup*>::iterator iter;
@@ -40,11 +32,20 @@ void TTMap::start()
     // 将集群保存到全局变量中
     g_groups = groups;
     timer.start(500);
+    isTracking = true;
 }
 
 void TTMap::stop()
 {
+    isTracking = false;
     timer.stop();
+    // 清除旧数据
+    QListIterator<TargetGroupView*> i(views);
+    while (i.hasNext()) {
+        delete i.next();
+    }
+    views.clear();
+    update();
     if (targetGenerator) delete targetGenerator;
     g_groups = NULL;
 }

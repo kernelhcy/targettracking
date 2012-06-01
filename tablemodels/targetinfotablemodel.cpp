@@ -11,15 +11,20 @@ TargetInfoTableModel::TargetInfoTableModel(SingleTarget *t, QObject *parent) :
 
 void TargetInfoTableModel::updateTable()
 {
-    qDebug() << "update target info." << target->getStateCount();
+    if (!isTracking) {
+        target = NULL;
+        timer.stop();
+    }
+
     //beginInsertRows(QModelIndex(), target->getStateCount(), target->getStateCount());
     reset();    // 跟新数据，使table和model同步
-    emit dataChanged(this->index(0, 0), this->index(target->getStateCount(), 11));
+    emit dataChanged(this->index(0, 0), this->index(rowCount(QModelIndex()), columnCount(QModelIndex())));
     //endInsertRows();
 }
 
 int TargetInfoTableModel::rowCount(const QModelIndex &parent) const
 {
+    if (target == NULL) return 0;
     return target->getStateCount();
 }
 

@@ -13,7 +13,12 @@ GroupInfoTableModel::GroupInfoTableModel(TargetGroup *g, QObject *parent) :
 // 定时刷新数据
 void GroupInfoTableModel::updateTable()
 {
-    emit dataChanged(this->index(0, 0), this->index(grp->getTargetCount(), 13));
+    if (!isTracking){
+        grp = NULL;
+        reset();    // 跟新数据，使table和model同步
+        timer.stop();
+    }
+    emit dataChanged(this->index(0, 0), this->index(rowCount(QModelIndex()), columnCount(QModelIndex())));
 }
 
 void GroupInfoTableModel::setGroup(TargetGroup *grp)
@@ -23,6 +28,7 @@ void GroupInfoTableModel::setGroup(TargetGroup *grp)
 
 int GroupInfoTableModel::rowCount(const QModelIndex &parent) const
 {
+    if (grp == NULL) return 0;
     return grp->getTargetCount();
 }
 

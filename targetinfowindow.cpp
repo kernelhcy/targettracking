@@ -26,6 +26,7 @@ TargetInfoWindow::TargetInfoWindow(SingleTarget *t, QWidget *parent) :
 TargetInfoWindow::~TargetInfoWindow()
 {
     delete ui;
+    delete model;
 }
 
 void TargetInfoWindow::updateTable(QModelIndex start, QModelIndex end)
