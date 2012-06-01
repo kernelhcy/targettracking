@@ -23,6 +23,10 @@ GroupInfoWindow::GroupInfoWindow(TargetGroup *g, QWidget *parent) :
 
     connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateTable()));
     connect(table, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(rowDoubleClicket(QModelIndex)));
+
+    this->setWindowTitle(QString("集群G%1 详细信息").arg(g->getID()));
+    ui->grpIDLabel->setText(QString("G%1").arg(grp->getID()));
+    ui->targetNumLabel->setText(QString("%1").arg(model->rowCount(QModelIndex())));
 }
 
 GroupInfoWindow::~GroupInfoWindow()
@@ -34,6 +38,13 @@ void GroupInfoWindow::updateTable()
 {
     for (int i = 0; i < model->columnCount(QModelIndex()) ; ++i) {
         table->horizontalHeader()->setResizeMode(i, QHeaderView::Stretch);
+    }
+    if (isTracking) {
+        ui->grpIDLabel->setText(QString("G%1").arg(grp->getID()));
+        ui->targetNumLabel->setText(QString("%1").arg(model->rowCount(QModelIndex())));
+    } else {
+        ui->grpIDLabel->setText(QString("No Such Group."));
+        ui->targetNumLabel->setText(QString("NAN"));
     }
 }
 

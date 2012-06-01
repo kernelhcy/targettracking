@@ -21,6 +21,10 @@ TargetInfoWindow::TargetInfoWindow(SingleTarget *t, QWidget *parent) :
     table->setAutoScroll(true);
 
     connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateTable(QModelIndex,QModelIndex)));
+
+    this->setWindowTitle(QString("目标T%1 详细信息").arg(target->getID()));
+    ui->targetIDLabel->setText(QString("T%1").arg(target->getID()));
+    ui->stateNumLabel->setText(QString("%1").arg(target->getStateCount()));
 }
 
 TargetInfoWindow::~TargetInfoWindow()
@@ -31,5 +35,11 @@ TargetInfoWindow::~TargetInfoWindow()
 
 void TargetInfoWindow::updateTable(QModelIndex start, QModelIndex end)
 {
-
+    if (isTracking) {
+        ui->targetIDLabel->setText(QString("T%1").arg(target->getID()));
+        ui->stateNumLabel->setText(QString("%1").arg(target->getStateCount()));
+    } else {
+        ui->targetIDLabel->setText(QString("No Such Target..."));
+        ui->stateNumLabel->setText(QString("NAN"));
+    }
 }
