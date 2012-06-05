@@ -6,7 +6,7 @@ SingleTargetView::SingleTargetView(SingleTarget *t): target(t), color(Qt::black)
 {
 }
 
-void SingleTargetView::draw(QPainter &painter, int width, int height)
+void SingleTargetView::draw(QPainter &painter, int margin, int width, int height)
 {
     painter.setPen(QPen(color, 1));
 
@@ -20,8 +20,8 @@ void SingleTargetView::draw(QPainter &painter, int width, int height)
         //
         // 虚拟目标区域的大小是10000*10000.
         //
-        x = width * (s -> getPositionX()) / TTMap::WIDTH;
-        y = height - height * ( s -> getPositionY() ) / TTMap::HEIGHT;
+        x = width * (s -> getPositionX()) / TTMap::WIDTH + margin;
+        y = height - height * ( s -> getPositionY() ) / TTMap::HEIGHT - margin;
         //qDebug("draw point at (%d, %d) in (%d, %d)", x, y, width, height);
         if (i == stateCount - 1) {
             w = h = 4;

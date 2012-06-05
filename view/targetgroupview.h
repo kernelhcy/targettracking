@@ -15,9 +15,10 @@ public:
     // 在屏幕的(0, 0)到(width, height)区域内绘制目标
     //
     // @param painter   画笔
+    // @param margin    留白
     // @param width     绘制区域的宽度
     // @param height    绘制区域的高度
-    void draw(QPainter &painter, int width, int heigth);
+    void draw(QPainter &painter, int margin, int width, int heigth);
 
     //
     // 设置获取目标颜色

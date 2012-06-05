@@ -9,6 +9,7 @@ TTMap::TTMap(QWidget *parent) :
     QWidget(parent), targetGenerator(NULL), views(), timer(this)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeOutHandler()));
+    margin = 10;
 }
 
 void TTMap::start()
@@ -71,7 +72,7 @@ void TTMap::paintEvent(QPaintEvent */*event*/)
 
     QListIterator<TargetGroupView*> i(views);
     while (i.hasNext()) {
-        i.next()->draw(painter, width(), height());
+        i.next()->draw(painter, margin, width(), height());
     }
 }
 
@@ -86,21 +87,27 @@ TargetGroup* TTMap::getClickedTargetGroup(int x, int y)
 {
     std::vector<TargetGroup*> *groups = targetGenerator->getGroups();
     std::vector<TargetGroup*>::iterator iter;
-    TargetGroup *tg;
+    TargetGroup *tg, *nearestGrp;
+    float minDst = 0xffffffff, tmp;
     for (iter = groups -> begin(); iter != groups -> end(); ++iter) {
         tg = (*iter);
-        if (isTargetGroupClicked(tg, x, y)) {
-            return tg;
+        tmp = getTargetGroupDist(tg, x, y);
+        if (minDst > tmp) {
+            minDst = tmp;
+            nearestGrp = tg;
         }
     }
-    return NULL;
+    // 最小距离大于5，认为没有选中任何目标
+    if (minDst > 5) return NULL;
+    return nearestGrp;
 }
 
-bool TTMap::isTargetGroupClicked(TargetGroup *grp, int x, int y)
+float TTMap::getTargetGroupDist(TargetGroup *grp, int x, int y)
 {
-    if (grp == NULL) return false;
+    if (grp == NULL) return 0xffffffff;
     SingleTarget *t;
     State *s;
+    float minDist = 0xffffffff, tmp;
     for (int i = 0; i < grp->getTargetCount(); ++i) {
         t = grp->getTarget(i);
         for (int j = 0; j < t->getStateCount(); ++j) {
@@ -108,10 +115,17 @@ bool TTMap::isTargetGroupClicked(TargetGroup *grp, int x, int y)
             float xx, yy;
             xx = width() * (s -> getPositionX()) / TTMap::WIDTH;
             yy = height() - height() * ( s -> getPositionY() ) / TTMap::HEIGHT;
-            if (qAbs(xx - x) < 5 && qAbs(yy - y) < 5) {
-                return true;
+            tmp = (xx - x) * (xx - x) + (yy - y) * (yy - y);
+            if (minDist > tmp) {
+                minDist = tmp;
             }
         }
     }
-    return false;
+    qDebug() << grp->getID() << "minDst:" << minDist;
+    return minDist;
+}
+
+void TTMap::drawAxes()
+{
+
 }

@@ -20,11 +20,11 @@ TargetGroupView::~TargetGroupView()
     }
 }
 
-void TargetGroupView::draw(QPainter &painter, int width, int height)
+void TargetGroupView::draw(QPainter &painter, int margin, int width, int height)
 {
     std::vector<SingleTargetView*>::iterator iter;
     for (iter = views.begin(); iter != views.end(); ++iter) {
-        (*iter) -> draw(painter, width, height);
+        (*iter) -> draw(painter, margin, width, height);
     }
 }
 

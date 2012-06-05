@@ -37,6 +37,7 @@ private:
     TargetGenerator *targetGenerator;
     QList<TargetGroupView*> views;
 
+    int margin;         // 坐标系周围的留白
     QTimer timer;       // 定时器
 
     //
@@ -44,9 +45,14 @@ private:
     //
     TargetGroup* getClickedTargetGroup(int x, int y);
     //
-    // 判断集群是否被点击
+    // 计算点击的点和集群的最近距离
     //
-    bool isTargetGroupClicked(TargetGroup *grp, int x, int y);
+    float getTargetGroupDist(TargetGroup *grp, int x, int y);
+
+    //
+    // 绘制坐标系
+    //
+    void drawAxes();
 };
 
 #endif // TTMAP_H
