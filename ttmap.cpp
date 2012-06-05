@@ -9,7 +9,7 @@ TTMap::TTMap(QWidget *parent) :
     QWidget(parent), targetGenerator(NULL), views(), timer(this)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeOutHandler()));
-    margin = 10;
+    margin = 15;
 }
 
 void TTMap::start()
@@ -54,14 +54,6 @@ void TTMap::stop()
 void TTMap::timeOutHandler()
 {
     targetGenerator->go(1);
-
-//    qDebug() << "Current states:";
-//    std::vector<State> states = targetGenerator->getCurrentStates();
-//    std::vector<State>::iterator iter;
-//    for (iter = states.begin(); iter != states.end(); ++iter) {
-//        (*iter).print();
-//    }
-
     update();
 }
 
@@ -69,10 +61,11 @@ void TTMap::paintEvent(QPaintEvent */*event*/)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
+    drawAxes(painter);
 
     QListIterator<TargetGroupView*> i(views);
     while (i.hasNext()) {
-        i.next()->draw(painter, margin, width(), height());
+        i.next()->draw(painter, margin, width() - margin * 2, height() - margin * 2);
     }
 }
 
@@ -85,6 +78,7 @@ void TTMap::mouseReleaseEvent(QMouseEvent *e)
 
 TargetGroup* TTMap::getClickedTargetGroup(int x, int y)
 {
+    if (targetGenerator == NULL) return NULL;
     std::vector<TargetGroup*> *groups = targetGenerator->getGroups();
     std::vector<TargetGroup*>::iterator iter;
     TargetGroup *tg, *nearestGrp;
@@ -125,7 +119,9 @@ float TTMap::getTargetGroupDist(TargetGroup *grp, int x, int y)
     return minDist;
 }
 
-void TTMap::drawAxes()
+void TTMap::drawAxes(QPainter &painter)
 {
-
+    int real_margin = margin - 5;
+    painter.drawRect(real_margin, real_margin
+                     , width() - real_margin * 2, height() - real_margin * 2);
 }

@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui -> mapWidget -> setLayout(layout);
 
     //showMaximized();
+    setMinimumSize(size());
 }
 
 MainWindow::~MainWindow()

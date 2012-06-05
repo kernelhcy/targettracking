@@ -52,7 +52,7 @@ private:
     //
     // 绘制坐标系
     //
-    void drawAxes();
+    void drawAxes(QPainter &painter);
 };
 
 #endif // TTMAP_H
