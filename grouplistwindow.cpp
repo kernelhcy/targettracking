@@ -33,6 +33,12 @@ GroupListWindow::GroupListWindow(QWidget *parent) :
 GroupListWindow::~GroupListWindow()
 {
     delete ui;
+    delete model;
+}
+
+void GroupListWindow::updateTable()
+{
+    model->setGroupInfos(g_groups);
 }
 
 void GroupListWindow::rowDoubleClicket(const QModelIndex &index)
@@ -43,5 +49,5 @@ void GroupListWindow::rowDoubleClicket(const QModelIndex &index)
 
     TargetGroup *grp = g_groups->at(row);
     GroupInfoWindow *infoWin = new GroupInfoWindow(grp, this);
-    infoWin->setVisible(true);
+    infoWin->show();
 }

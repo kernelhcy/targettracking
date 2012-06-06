@@ -11,5 +11,6 @@ void printf_matrix(const Matrix &m);
 class TargetGroup;
 // 集群数据
 extern std::vector<TargetGroup*> *g_groups;
+extern bool isTracking;         // 是否正在进行跟踪。
 
 #endif // COMM_H

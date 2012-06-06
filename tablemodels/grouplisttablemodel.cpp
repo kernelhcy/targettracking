@@ -19,6 +19,7 @@ int GroupListTableModel::columnCount(const QModelIndex &parent) const
 void GroupListTableModel::setGroupInfos(std::vector<TargetGroup*> *grps)
 {
     groups = grps;
+    reset();    // 刷新数据
 }
 
 QVariant GroupListTableModel::data(const QModelIndex &index, int role) const

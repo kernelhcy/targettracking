@@ -9,6 +9,7 @@ TTMap::TTMap(QWidget *parent) :
     QWidget(parent), targetGenerator(NULL), views(), timer(this)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeOutHandler()));
+    margin = 25;
 }
 
 void TTMap::start()
@@ -19,14 +20,6 @@ void TTMap::start()
 
     qDebug() << "group number:" << groupNumber;
     qDebug() << "group target number:" << targetNumber;
-
-    // 清除旧数据
-    QListIterator<TargetGroupView*> i(views);
-    while (i.hasNext()) {
-        delete i.next();
-    }
-    views.clear();
-    update();
 
     targetGenerator = new TargetGenerator(groupNumber, targetNumber);
     std::vector<TargetGroup*> *groups = targetGenerator->getGroups();
@@ -40,11 +33,20 @@ void TTMap::start()
     // 将集群保存到全局变量中
     g_groups = groups;
     timer.start(500);
+    isTracking = true;
 }
 
 void TTMap::stop()
 {
+    isTracking = false;
     timer.stop();
+    // 清除旧数据
+    QListIterator<TargetGroupView*> i(views);
+    while (i.hasNext()) {
+        delete i.next();
+    }
+    views.clear();
+    update();
     if (targetGenerator) delete targetGenerator;
     g_groups = NULL;
 }
@@ -52,24 +54,141 @@ void TTMap::stop()
 void TTMap::timeOutHandler()
 {
     targetGenerator->go(1);
-
-    qDebug() << "Current states:";
-    std::vector<State> states = targetGenerator->getCurrentStates();
-    std::vector<State>::iterator iter;
-    for (iter = states.begin(); iter != states.end(); ++iter) {
-        (*iter).print();
-    }
-
+    emit targetsUpdated();
     update();
 }
 
 void TTMap::paintEvent(QPaintEvent */*event*/)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    //painter.setRenderHint(QPainter::Antialiasing, true);
+    drawAxes(painter);
 
     QListIterator<TargetGroupView*> i(views);
     while (i.hasNext()) {
-        i.next()->draw(painter, width(), height());
+        i.next()->draw(painter, margin, width() - margin * 2, height() - margin * 2);
+    }
+}
+
+void TTMap::mouseReleaseEvent(QMouseEvent *e)
+{
+    qDebug() << "Button click" << "(" << e->x() << "," << e->y() << ")";
+    TargetGroup *g = getClickedTargetGroup(e->x(), e->y());
+    if (g) {
+        qDebug() << "click group:" << g->getID();
+        QListIterator<TargetGroupView*> i(views);
+        while (i.hasNext()) {
+            TargetGroupView *v = i.next();
+            v->setColor(QColor(0, 0, 255, 80));
+            if (v->getTargetGroup() == g) {
+                v->setColor(QColor(255, 0, 0, 255));
+            }
+        }
+
+    } else {
+        QListIterator<TargetGroupView*> i(views);
+        while (i.hasNext()) {
+            TargetGroupView *v = i.next();
+            v->setColor(QColor(0, 0, 255, 255));
+        }
+    }
+    emit targetSelectet(g);
+    emit targetsUpdated();
+    update();
+}
+
+TargetGroup* TTMap::getClickedTargetGroup(int x, int y)
+{
+    if (targetGenerator == NULL) return NULL;
+    std::vector<TargetGroup*> *groups = targetGenerator->getGroups();
+    std::vector<TargetGroup*>::iterator iter;
+    TargetGroup *tg, *nearestGrp;
+    float minDst = 0xffffffff, tmp;
+    for (iter = groups -> begin(); iter != groups -> end(); ++iter) {
+        tg = (*iter);
+        tmp = getTargetGroupDist(tg, x, y);
+        if (minDst > tmp) {
+            minDst = tmp;
+            nearestGrp = tg;
+        }
+    }
+    // 最小距离大于10，认为没有选中任何目标
+    if (minDst > 100) return NULL;
+    return nearestGrp;
+}
+
+float TTMap::getTargetGroupDist(TargetGroup *grp, int x, int y)
+{
+    if (grp == NULL) return 0xffffffff;
+    SingleTarget *t;
+    State *s;
+    float minDist = 0xffffffff, tmp;
+    for (int i = 0; i < grp->getTargetCount(); ++i) {
+        t = grp->getTarget(i);
+        for (int j = 0; j < t->getStateCount(); ++j) {
+            s = t->getState(j);
+            float xx, yy;
+            xx = width() * (s -> getPositionX()) / TTMap::WIDTH;
+            yy = height() - height() * ( s -> getPositionY() ) / TTMap::HEIGHT;
+            tmp = (xx - x) * (xx - x) + (yy - y) * (yy - y);
+            if (minDist > tmp) {
+                minDist = tmp;
+            }
+        }
+    }
+    qDebug() << grp->getID() << "minDst:" << minDist;
+    return minDist;
+}
+
+void TTMap::drawAxes(QPainter &painter)
+{
+    int real_margin = margin - 5;
+
+    // 画一个边框
+    painter.setPen(QPen(Qt::black, 0.3));
+    painter.drawRect(real_margin, real_margin
+                     , width() - real_margin * 2, height() - real_margin * 2);
+
+    painter.setPen(QPen(Qt::black, 0.2));
+    // 单位提示
+    QFont oldfont = painter.font();
+    painter.setFont(QFont("Arial", 9));
+    painter.drawText(width() - 150, 13, QString("单位：km, km/s"));
+    painter.setFont(oldfont);
+
+    painter.setPen(QPen(Qt::black, 1));
+    // 原点
+    painter.drawText(real_margin - 10, height() - real_margin + 10, QString("0"));
+    // x轴坐标
+    float step = (float)( width() - real_margin * 2) / (float)10;
+    for (int i = 1; i <= 10; ++i) {
+        float x, y;
+        y = height() - real_margin + 20;
+        x = step * i + real_margin;
+        QString label = QString("%1").arg(i);
+        painter.drawText(x - this->fontMetrics().width(label) / 2, y, label);
+        painter.drawLine(x, height() - real_margin, x, height() - real_margin + 3);
+
+        QPen oldpen = painter.pen();
+        painter.setPen(QPen(Qt::black, 0.2, Qt::DashDotLine, Qt::RoundCap));
+        painter.drawLine(x, height() - real_margin, x, real_margin);
+        painter.setPen(oldpen);
+    }
+
+    // y轴坐标
+    step = (float)(height() - real_margin * 2) / (float) 10 ;
+    for (int i = 1; i <= 10; ++i) {
+        float x, y;
+        QString label = QString("%1").arg(i);
+        x = real_margin;
+        y = (10 - i) * step + real_margin;
+        painter.drawText(x - this->fontMetrics().width(label) - 5
+                         , y + this->fontMetrics().height() / 2 - 2, label);
+        painter.drawLine(x - 3, y, x, y);
+
+        QPen oldpen = painter.pen();
+        painter.setPen(QPen(Qt::black, 0.2, Qt::DashDotLine, Qt::RoundCap));
+        painter.drawLine(x, y, width() - real_margin, y);
+        painter.setPen(oldpen);
     }
 }
