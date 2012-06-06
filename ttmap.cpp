@@ -149,25 +149,30 @@ void TTMap::drawAxes(QPainter &painter)
     painter.drawRect(real_margin, real_margin
                      , width() - real_margin * 2, height() - real_margin * 2);
 
-    painter.setPen(QPen(Qt::black, 0.1));
+    painter.setPen(QPen(Qt::black, 0.2));
     // 单位提示
     QFont oldfont = painter.font();
     painter.setFont(QFont("Arial", 9));
-    painter.drawText(width() - 150, 13, QString("单位：Km"));
+    painter.drawText(width() - 150, 13, QString("单位：km, km/s"));
     painter.setFont(oldfont);
 
     painter.setPen(QPen(Qt::black, 1));
     // 原点
     painter.drawText(real_margin - 10, height() - real_margin + 10, QString("0"));
     // x轴坐标
-    float step = (float)( width() - real_margin) / (float)10;
+    float step = (float)( width() - real_margin * 2) / (float)10;
     for (int i = 1; i <= 10; ++i) {
         float x, y;
         y = height() - real_margin + 20;
-        x = step * i;
+        x = step * i + real_margin;
         QString label = QString("%1").arg(i);
         painter.drawText(x - this->fontMetrics().width(label) / 2, y, label);
         painter.drawLine(x, height() - real_margin, x, height() - real_margin + 3);
+
+        QPen oldpen = painter.pen();
+        painter.setPen(QPen(Qt::black, 0.2, Qt::DashDotLine, Qt::RoundCap));
+        painter.drawLine(x, height() - real_margin, x, real_margin);
+        painter.setPen(oldpen);
     }
 
     // y轴坐标
@@ -180,5 +185,10 @@ void TTMap::drawAxes(QPainter &painter)
         painter.drawText(x - this->fontMetrics().width(label) - 5
                          , y + this->fontMetrics().height() / 2 - 2, label);
         painter.drawLine(x - 3, y, x, y);
+
+        QPen oldpen = painter.pen();
+        painter.setPen(QPen(Qt::black, 0.2, Qt::DashDotLine, Qt::RoundCap));
+        painter.drawLine(x, y, width() - real_margin, y);
+        painter.setPen(oldpen);
     }
 }
