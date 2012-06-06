@@ -9,7 +9,7 @@ TTMap::TTMap(QWidget *parent) :
     QWidget(parent), targetGenerator(NULL), views(), timer(this)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeOutHandler()));
-    margin = 15;
+    margin = 25;
 }
 
 void TTMap::start()
@@ -60,7 +60,7 @@ void TTMap::timeOutHandler()
 void TTMap::paintEvent(QPaintEvent */*event*/)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    //painter.setRenderHint(QPainter::Antialiasing, true);
     drawAxes(painter);
 
     QListIterator<TargetGroupView*> i(views);
@@ -91,8 +91,8 @@ TargetGroup* TTMap::getClickedTargetGroup(int x, int y)
             nearestGrp = tg;
         }
     }
-    // 最小距离大于5，认为没有选中任何目标
-    if (minDst > 5) return NULL;
+    // 最小距离大于10，认为没有选中任何目标
+    if (minDst > 100) return NULL;
     return nearestGrp;
 }
 
@@ -122,6 +122,42 @@ float TTMap::getTargetGroupDist(TargetGroup *grp, int x, int y)
 void TTMap::drawAxes(QPainter &painter)
 {
     int real_margin = margin - 5;
+
+    // 画一个边框
+    painter.setPen(QPen(Qt::black, 0.3));
     painter.drawRect(real_margin, real_margin
                      , width() - real_margin * 2, height() - real_margin * 2);
+
+    painter.setPen(QPen(Qt::black, 0.1));
+    // 单位提示
+    QFont oldfont = painter.font();
+    painter.setFont(QFont("Arial", 9));
+    painter.drawText(width() - 150, 13, QString("单位：Km"));
+    painter.setFont(oldfont);
+
+    painter.setPen(QPen(Qt::black, 1));
+    // 原点
+    painter.drawText(real_margin - 10, height() - real_margin + 10, QString("0"));
+    // x轴坐标
+    float step = (float)( width() - real_margin) / (float)10;
+    for (int i = 1; i <= 10; ++i) {
+        float x, y;
+        y = height() - real_margin + 20;
+        x = step * i;
+        QString label = QString("%1").arg(i);
+        painter.drawText(x - this->fontMetrics().width(label) / 2, y, label);
+        painter.drawLine(x, height() - real_margin, x, height() - real_margin + 3);
+    }
+
+    // y轴坐标
+    step = (float)(height() - real_margin * 2) / (float) 10 ;
+    for (int i = 1; i <= 10; ++i) {
+        float x, y;
+        QString label = QString("%1").arg(i);
+        x = real_margin;
+        y = (10 - i) * step + real_margin;
+        painter.drawText(x - this->fontMetrics().width(label) - 5
+                         , y + this->fontMetrics().height() / 2 - 2, label);
+        painter.drawLine(x - 3, y, x, y);
+    }
 }

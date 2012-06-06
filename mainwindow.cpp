@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     map = new TTMap();
     QGridLayout *layout = new QGridLayout();
+    layout->setMargin(2);
     layout -> addWidget(map);
     ui -> mapWidget -> setLayout(layout);
 
