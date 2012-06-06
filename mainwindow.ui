@@ -117,9 +117,6 @@
         </sizepolicy>
        </property>
        <layout class="QFormLayout" name="formLayout">
-        <property name="margin">
-         <number>15</number>
-        </property>
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
@@ -151,7 +148,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_25">
             <property name="text">
-             <string>时刻：</string>
+             <string>t</string>
             </property>
            </widget>
           </item>
@@ -174,12 +171,12 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_26">
             <property name="text">
-             <string>位置：</string>
+             <string>sx</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLabel" name="sLabel">
+           <widget class="QLabel" name="sxLabel">
             <property name="minimumSize">
              <size>
               <width>50</width>
@@ -195,14 +192,14 @@
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLabel" name="label_29">
+           <widget class="QLabel" name="label_30">
             <property name="text">
-             <string>速度：</string>
+             <string>sy</string>
             </property>
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLabel" name="vLabel">
+           <widget class="QLabel" name="syLabel">
             <property name="minimumSize">
              <size>
               <width>50</width>
@@ -218,14 +215,152 @@
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QLabel" name="label_28">
+           <widget class="QLabel" name="label_31">
             <property name="text">
-             <string>加速度：</string>
+             <string>sz</string>
             </property>
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLabel" name="aLabel">
+           <widget class="QLabel" name="szLabel">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>vx</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="vxLabel">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_33">
+            <property name="text">
+             <string>vy</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLabel" name="vyLabel">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_32">
+            <property name="text">
+             <string>vz</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLabel" name="vzLabel">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>ax</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QLabel" name="axLabel">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_34">
+            <property name="text">
+             <string>ay</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QLabel" name="ayLabel">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_35">
+            <property name="text">
+             <string>az</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1">
+           <widget class="QLabel" name="azLabel">
             <property name="minimumSize">
              <size>
               <width>50</width>

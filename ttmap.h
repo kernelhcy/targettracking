@@ -24,6 +24,16 @@ public:
     const static int WIDTH = 10000;
     const static int HEIGHT = 10000;
 
+signals:
+    // 目标位置更新是发送此信号
+    void targetsUpdated();
+
+    //
+    // 当有目标被选中的时候，发送此信号。
+    // grp可以为NULL, 为NULL的时候表示没有目标被选中
+    //
+    void targetSelectet(TargetGroup *grp);
+
 public slots:
     // 开始跟踪
     void start();

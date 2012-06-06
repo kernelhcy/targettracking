@@ -54,6 +54,7 @@ void TTMap::stop()
 void TTMap::timeOutHandler()
 {
     targetGenerator->go(1);
+    emit targetsUpdated();
     update();
 }
 
@@ -73,7 +74,27 @@ void TTMap::mouseReleaseEvent(QMouseEvent *e)
 {
     qDebug() << "Button click" << "(" << e->x() << "," << e->y() << ")";
     TargetGroup *g = getClickedTargetGroup(e->x(), e->y());
-    if (g) qDebug() << "click group:" << g->getID();
+    if (g) {
+        qDebug() << "click group:" << g->getID();
+        QListIterator<TargetGroupView*> i(views);
+        while (i.hasNext()) {
+            TargetGroupView *v = i.next();
+            v->setColor(QColor(0, 0, 255, 80));
+            if (v->getTargetGroup() == g) {
+                v->setColor(QColor(255, 0, 0, 255));
+            }
+        }
+
+    } else {
+        QListIterator<TargetGroupView*> i(views);
+        while (i.hasNext()) {
+            TargetGroupView *v = i.next();
+            v->setColor(QColor(0, 0, 255, 255));
+        }
+    }
+    emit targetSelectet(g);
+    emit targetsUpdated();
+    update();
 }
 
 TargetGroup* TTMap::getClickedTargetGroup(int x, int y)

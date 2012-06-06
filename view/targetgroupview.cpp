@@ -41,3 +41,8 @@ QColor TargetGroupView::getColor()
 {
     return color;
 }
+
+TargetGroup* TargetGroupView::getTargetGroup() const
+{
+    return group;
+}

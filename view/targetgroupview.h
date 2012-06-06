@@ -26,6 +26,8 @@ public:
     void setColor(QColor);
     QColor getColor();
 
+    TargetGroup* getTargetGroup() const;
+
 private:
     TargetGroup *group;
     QColor color;
