@@ -2,8 +2,46 @@
 #include "../model/singletarget.h"
 #include "../model/SystemModel.h"
 #include <math.h>
-TargetGenerator::TargetGenerator(int groupNum, int targetInGroupNum)
+#include <QtGlobal>
+
+static State states[30] = {
+    // 地面集群初始化状态
+    State(300, -30, 0, 50, 105, 0,    1, 1, 0, 0),
+    State(300, -30, 0, 5, 95, 0,      2, 3, 0, 0),
+    State(300, -30, 0, 150, 85, 0,    1, -2, 0, 0),
+    State(300, -30, 0, 50, 75, 0,     2, 1, 0, 0),
+    State(300, -30, 0, 40, 65, 0,     3, 2, 0, 0),
+    State(300, -30, 0, 30, 55, 0,     -1, 1, 0, 0),
+    State(300, -30, 0, 20, 45, 0,     2, 2, 0, 0),
+    State(300, -30, 0, 10, 35, 0,     3, 1, 0, 0),
+    State(300, -30, 0, 140, 25, 0,    -2, 1, 0, 0),
+    State(300, -30, 0, -130, 15, 0,   3, 2, 0, 0),
+    State(300, -30, 0, 120, 25, 0,   2, 2, 0, 0),
+    State(300, -30, 0, 110, 45, 0,   -1, 3, 0, 0),
+    State(300, -30, 0, 100, 245, 0,   3, -2, 0, 0),
+    State(300, -30, 0, -50, 175, 0,   2, -1, 0, 0),
+    State(300, -30, 0, -30, 135, 0,  3, 2, 0, 0),
+    // 空中集群初始化状态
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0),
+    State(300, 0, 0, 50, 205, 0, 8, -5, 0, 0)
+};
+
+TargetGenerator::TargetGenerator(int groupNum, int targetInGroupNum, int skyGroupNumber, int groundGroupNumber)
     : targetInGroupNumber(targetInGroupNum), groupNumber(groupNum), groups()
+    , skyGroupNumber(skyGroupNumber), groundGroupNumber(groundGroupNumber)
 {
     initGroups();
 }
@@ -30,13 +68,25 @@ std::vector<TargetGroup*>* TargetGenerator::getGroups()
 
 void TargetGenerator::initGroups()
 {
-    for (int i = 0; i < groupNumber; ++i) {
-        State initState(i * 300, 0,  0
-                        , 50,   205, 0
-                        , 8,    -5,  0
-                        , 0);
-        TargetGroup * grp = createGroup((i + 1) * 1000, initState, targetInGroupNumber);
+    int groupId = 1;
+    // 地面集群
+    for (int i = 0; i < groundGroupNumber; ++i) {
+        int index = qrand() % 15;
+        State initState = states[index];
+        initState.setPositionX(groupId * 300);
+        TargetGroup * grp = createGroup(groupId * 1000, initState, targetInGroupNumber);
         groups.push_back(grp);
+        ++groupId;
+    }
+
+    // 空中集群
+    for (int i = 0; i < skyGroupNumber; ++i) {
+        int index = qrand() % 15;
+        State initState = states[index + 15];
+        initState.setPositionX(groupId * 300);
+        TargetGroup * grp = createGroup(groupId * 1000, initState, targetInGroupNumber);
+        groups.push_back(grp);
+        ++groupId;
     }
 }
 

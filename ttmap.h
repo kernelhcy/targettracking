@@ -20,7 +20,7 @@ public:
     void paintEvent(QPaintEvent *);
     void mouseReleaseEvent(QMouseEvent *);
 
-    // 所模拟的区域是10000 * 10000大小的区域
+    // 所模拟的区域大小
     const static int WIDTH = 10000;
     const static int HEIGHT = 10000;
 

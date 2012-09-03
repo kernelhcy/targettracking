@@ -15,7 +15,7 @@ public:
     //
     // @param groupNum              集群数量
     // @param targetInGroupNum      集群中目标的数量
-    TargetGenerator(int groupNum, int targetInGroupNum);
+    TargetGenerator(int groupNum, int targetInGroupNum, int skyGroupNumber, int groundGroupNumber);
     ~TargetGenerator();
 
     void go(int time);
@@ -31,6 +31,9 @@ private:
     std::vector<TargetGroup*> groups;
     int targetInGroupNumber;
     int groupNumber;
+
+    int skyGroupNumber;         // 空中集群数目
+    int groundGroupNumber;      // 地面集群数目
 
     void initGroups();
     TargetGroup* createGroup(int id, State initState, int targetNum);

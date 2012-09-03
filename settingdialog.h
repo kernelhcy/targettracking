@@ -14,10 +14,15 @@ class SettingDialog : public QDialog
 public:
     explicit SettingDialog(QWidget *parent = 0);
     ~SettingDialog();
+
 public slots:
     void onResetButtonClick();
     void onOkButtonClick();
     void onCancelButtonClick();
+
+    void onGroupNumberSpinValueChanged(int);
+    void onSkyGroupNumberSpinValueChanged(int);
+    void onGroundGroupNumberSpinValueChanged(int);
 
 private:
     Ui::SettingDialog *ui;

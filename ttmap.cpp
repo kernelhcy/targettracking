@@ -14,14 +14,16 @@ TTMap::TTMap(QWidget *parent) :
 
 void TTMap::start()
 {
-    QSettings settings("sslib", "targettracking");
-    int groupNumber = settings.value("group number", 0).toInt();
-    int targetNumber = settings.value("group target number", 0).toInt();
+    QSettings settings(SETTING_ORGANIZATION, SETTING_APPLICATION);
+    int groupNumber = settings.value(SETTING_GROUP_NUMBER_KEY, 0).toInt();
+    int targetNumber = settings.value(SETTING_GROUP_TARGET_NUMBER_KEY, 0).toInt();
+    int skyGrpNumber = settings.value(SETTING_SKY_TARGET_NUMBER_KEY, 0).toInt();
+    int groundGrpNumber = settings.value(SETTING_GROUND_TARGET_NUMBER_KEY, 0).toInt();
 
     qDebug() << "group number:" << groupNumber;
     qDebug() << "group target number:" << targetNumber;
 
-    targetGenerator = new TargetGenerator(groupNumber, targetNumber);
+    targetGenerator = new TargetGenerator(groupNumber, targetNumber, skyGrpNumber, groundGrpNumber);
     std::vector<TargetGroup*> *groups = targetGenerator->getGroups();
     std::vector<TargetGroup*>::iterator iter;
     for (iter = groups -> begin(); iter != groups -> end(); ++iter) {
