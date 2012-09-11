@@ -7,7 +7,7 @@
 class SingleTarget
 {
 public:
-    SingleTarget(int i, const SystemModel& m, State &init):id(i), states(), model(m)
+    SingleTarget(int i, const SystemModel m, State init):id(i), states(), model(m)
     {
         State * s = new State(init);
         states.push_back(s);
@@ -49,6 +49,9 @@ public:
     //获取初始状态
     State* getInitState() { return states.at(0); }
 
+    // 制作一个副本。
+    // 不包含状态集合。
+    SingleTarget* clone();
 private:
     int id;						// 目标id
     std::vector<State*> states;		// 目标状态集

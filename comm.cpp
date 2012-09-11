@@ -16,4 +16,6 @@ void printf_matrix(const Matrix &m)
 }
 
 std::vector<TargetGroup*> *g_groups = NULL;
+std::vector<KalmanFilter*> *g_filters = NULL;
+std::vector<TargetGroup*> *g_filted_groups = NULL;
 bool isTracking = false;

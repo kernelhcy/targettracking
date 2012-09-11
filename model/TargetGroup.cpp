@@ -59,7 +59,7 @@ int TargetGroup::getID()
     return id;
 }
 
-SingleTarget* TargetGroup::getTarget(int index)
+SingleTarget* TargetGroup::getTarget(size_t index)
 {
     if (targets.size() > index) {
         return targets.at(index);
@@ -76,9 +76,21 @@ SingleTarget* TargetGroup::getTargetByID(int id)
             return (*it);
         }
     }
+    return NULL;
 }
 
 int TargetGroup::getTargetCount()
 {
     return targets.size();
+}
+
+TargetGroup* TargetGroup::clone()
+{
+    TargetGroup* cpy = new TargetGroup(this -> id);
+    std::vector<SingleTarget*>::iterator iter;
+    for(iter = targets.begin(); iter != targets.end(); ++iter)
+    {
+        cpy->addTarget((*iter) -> clone());
+    }
+    return cpy;
 }

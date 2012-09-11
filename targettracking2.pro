@@ -29,7 +29,9 @@ SOURCES += main.cpp\
     tablemodels/grouplisttablemodel.cpp \
     tablemodels/groupinfotablemodel.cpp \
     targetinfowindow.cpp \
-    tablemodels/targetinfotablemodel.cpp
+    tablemodels/targetinfotablemodel.cpp \
+    filter/targettracker.cpp \
+    filter/KalmanFilter.cpp
 
 HEADERS  += mainwindow.h \
     ttmap.h \
@@ -52,7 +54,9 @@ HEADERS  += mainwindow.h \
     tablemodels/grouplisttablemodel.h \
     tablemodels/groupinfotablemodel.h \
     targetinfowindow.h \
-    tablemodels/targetinfotablemodel.h
+    tablemodels/targetinfotablemodel.h \
+    model/TargetState.h \
+    filter/targettracker.h
 
 FORMS    += mainwindow.ui \
     settingdialog.ui \

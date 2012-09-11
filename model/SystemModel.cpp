@@ -14,13 +14,13 @@ SystemModel::~SystemModel()
 
 }
 
-void SystemModel::UpdateModel(Matrix& f, Matrix& q)
+void SystemModel::UpdateModel(Matrix f, Matrix q)
 {
 	F = f;
 	Q = q;
 }
 
-void SystemModel::SetF(Matrix& f)
+void SystemModel::SetF(Matrix f)
 {
 	F = f;
 }
@@ -30,7 +30,7 @@ Matrix SystemModel::GetF()
 	return F;
 }
 
-void SystemModel::SetQ(Matrix& q)
+void SystemModel::SetQ(Matrix q)
 {
 	Q = q;
 }

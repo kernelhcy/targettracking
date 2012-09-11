@@ -8,9 +8,15 @@ typedef techsoft::matrix<double> Matrix;
 
 void printf_matrix(const Matrix &m);
 
+// 目标集群
 class TargetGroup;
-// 集群数据
 extern std::vector<TargetGroup*> *g_groups;
+extern std::vector<TargetGroup*> *g_filted_groups;       // 滤波后的集群状态
+
+// 滤波器
+class KalmanFilter;
+extern std::vector<KalmanFilter*> *g_filters;
+
 extern bool isTracking;         // 是否正在进行跟踪。
 
 #define SETTING_ORGANIZATION                "sslib"

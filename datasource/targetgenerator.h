@@ -4,6 +4,7 @@
 #include "../model/TargetGroup.h"
 #include <vector>
 #include "../model/State.h"
+#include "../model/TargetState.h"
 //
 // 用于生成目标数据
 //
@@ -22,10 +23,10 @@ public:
     std::vector<TargetGroup*>* getGroups();
 
     //
-    // 获取当前所有目标的状态。模拟雷达输出的数据
+    // 获取当前所有目标的状态。模拟数据关联算法输出的数据
     // 返回的是一个vector，不是vector指针。
     //
-    std::vector<State> getCurrentStates();
+    std::vector<TargetState> getCurrentStates();
 
 private:
     std::vector<TargetGroup*> groups;

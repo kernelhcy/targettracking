@@ -115,20 +115,24 @@ TargetGroup* TargetGenerator::createGroup(int id, State initState, int targetNum
     return grp;
 }
 
-std::vector<State> TargetGenerator::getCurrentStates()
+std::vector<TargetState> TargetGenerator::getCurrentStates()
 {
-    std::vector<State> states;
+    std::vector<TargetState> states;
     std::vector<TargetGroup*>::iterator iter;
     State *s;
     TargetGroup *grp;
     SingleTarget *target;
+    TargetState tState;
     for ( iter = groups.begin(); iter != groups.end(); ++iter){
         grp = (*iter);
         int targetCount = grp -> getTargetCount();
         for (int i = 0; i < targetCount; ++i) {
             target = grp -> getTarget(i);
             s = target -> getCurrState();
-            states.push_back(*s);
+            tState.groupId = grp->getID();
+            tState.targetId = target->getID();
+            tState.state = *s;
+            states.push_back(tState);
         }
     }
     return states;

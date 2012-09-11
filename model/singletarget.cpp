@@ -75,3 +75,9 @@ void SingleTarget::print()
         (*it) -> print();
     }
 }
+
+SingleTarget* SingleTarget::clone()
+{
+    SingleTarget *cpy = new SingleTarget(this->id, this->model, State());
+    return cpy;
+}

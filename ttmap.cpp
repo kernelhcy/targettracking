@@ -6,7 +6,7 @@
 
 
 TTMap::TTMap(QWidget *parent) :
-    QWidget(parent), targetGenerator(NULL), views(), timer(this)
+    QWidget(parent), targetGenerator(NULL), views(), timer(this), targetTracker(NULL)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeOutHandler()));
     margin = 25;
@@ -34,6 +34,10 @@ void TTMap::start()
 
     // 将集群保存到全局变量中
     g_groups = groups;
+    // 创建一个目标跟踪器
+    targetTracker = new TargetTracker();
+
+    // 启动定时器
     timer.start(500);
     isTracking = true;
 }
@@ -51,11 +55,23 @@ void TTMap::stop()
     update();
     if (targetGenerator) delete targetGenerator;
     g_groups = NULL;
+    if (targetTracker) delete targetTracker;
 }
 
+/**
+ * @brief TTMap::timeOutHandler
+ * 超时处理函数。
+ * 整个程序的驱动都是靠一个500ms触发一次的定时器。这个函数处理定时器的触发事件。
+ * 也就是整个程序的心脏。所有的算法的入口都在这个地方。
+ */
 void TTMap::timeOutHandler()
 {
+    // 产生新的量测数据
     targetGenerator->go(1);
+
+    // 对目标进行滤波
+    targetTracker->tracking(targetGenerator->getCurrentStates());
+
     emit targetsUpdated();
     update();
 }

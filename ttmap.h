@@ -7,6 +7,7 @@
 #include "view/targetgroupview.h"
 #include <QTimer>
 #include <QMouseEvent>
+#include "filter/targettracker.h"
 
 /*
  * 地图
@@ -49,6 +50,13 @@ private:
 
     int margin;         // 坐标系周围的留白
     QTimer timer;       // 定时器
+
+    /**
+     * @brief targetTracker 目标跟踪器
+     * 负责通过目标生成器获取的各个目标的测量状态，对目标进行滤波计算。
+     * 这个过程暂时省略了数据关联部分，所有的测量值都是和目标对应的。
+     */
+    TargetTracker *targetTracker;
 
     //
     // 获取被点击的集群

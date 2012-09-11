@@ -23,16 +23,16 @@ public:
 	virtual ~SystemModel();
 
 	//更新模型
-	void UpdateModel(Matrix& f, Matrix& q);
+    void UpdateModel(Matrix f, Matrix q);
 
 	//设置状态转移矩阵
-	void SetF(Matrix& f);
+    void SetF(Matrix f);
 
 	//获得状态转移矩阵
 	Matrix GetF();
 
 	//设置状态噪声协方差
-	void SetQ(Matrix& q);
+    void SetQ(Matrix q);
 
 	//获得状态噪声协方差
 	Matrix GetQ();

@@ -34,11 +34,14 @@ public:
     void deleteTarget(int id);
 
     // 获取一个目标
-    SingleTarget* getTarget(int index);
+    SingleTarget* getTarget(size_t index);
     SingleTarget* getTargetByID(int id);
 
     // 获取当前集群中的目标数量
     int getTargetCount();
+
+    // 构造一个副本
+    TargetGroup* clone();
 private:
     int id;                         // 集群id
     std::vector<SingleTarget*> targets;        // 目标
