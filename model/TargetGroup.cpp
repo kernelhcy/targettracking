@@ -72,14 +72,14 @@ SingleTarget* TargetGroup::getTargetByID(int id)
 {
     std::vector<SingleTarget*>::iterator it;
     for(it = targets.begin(); it != targets.end(); ++it) {
-        if ((*it) -> getID() == id) {
+        if ((*it)!= NULL && (*it) -> getID() == id) {
             return (*it);
         }
     }
     return NULL;
 }
 
-int TargetGroup::getTargetCount()
+size_t TargetGroup::getTargetCount()
 {
     return targets.size();
 }

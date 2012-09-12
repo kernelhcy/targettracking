@@ -38,7 +38,7 @@ public:
     SingleTarget* getTargetByID(int id);
 
     // 获取当前集群中的目标数量
-    int getTargetCount();
+    size_t getTargetCount();
 
     // 构造一个副本
     TargetGroup* clone();

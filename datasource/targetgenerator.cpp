@@ -132,6 +132,7 @@ std::vector<TargetState> TargetGenerator::getCurrentStates()
             tState.groupId = grp->getID();
             tState.targetId = target->getID();
             tState.state = *s;
+            tState.time = s->getTime();
             states.push_back(tState);
         }
     }

@@ -1,8 +1,25 @@
 #include "KalmanFilter.h"
+#include <QDebug>
 
 KalmanFilter::KalmanFilter(SystemModel sm, MeasureModel mm)
-    : systemModel(sm), measureModel(mm)
+    :  groupId(0), targetId(0), systemModel(sm), measureModel(mm), state(9, 1, 0.0)
+    , covariance(9, 9, 0.0), gain(9, 9, 0.0)
 {
+    init();
+}
+
+KalmanFilter::KalmanFilter()
+    :  groupId(0), targetId(0), systemModel(SystemModel::getModel(SystemModel::CA))
+    , measureModel(MeasureModel::getModel()), state(9, 1, 0.0), covariance(9, 9, 0.0), gain(9, 9, 0.0)
+{
+    init();
+}
+
+void KalmanFilter::init()
+{
+    // 初始化为单位矩阵
+    covariance.unit();
+    gain.unit();
 }
 
 KalmanFilter::~KalmanFilter()
@@ -30,36 +47,30 @@ void KalmanFilter::setModel(SystemModel sm, MeasureModel mm)
 
 Matrix KalmanFilter::estimate()
 {
-    if(systemModel.GetF().colsize() != state.rowsize())
-    {
-        qCritical() <<"Matrix not match, can't multiply";
-    }
     // 计算预测状态
     this->state = systemModel.GetF() * state;
     // 计算预测误差协方差
-    this->covariance = systemModel.GetF() * this->covariance * (~systemModel.GetF()) + systemModel.GetQ();
+    this->covariance = systemModel.GetF() * (this->covariance) * (~systemModel.GetF()) + systemModel.GetQ();
+    qDebug() << "covariance: ";
+    printf_matrix(covariance);
     return this->state;
 }
 
 void KalmanFilter::updateByMeasure(Matrix measure)
 {
     // 计算增益
-    gain = (covariance * (~measureModel.GetH()))
-                        /(measureModel.GetH() * covariance * (~measureModel.GetH())
-                                    + measureModel.GetR());
+    Matrix a = covariance * (~measureModel.GetH());
+    Matrix b = measureModel.GetH() * covariance * (~measureModel.GetH()) + measureModel.GetR();
+    gain = a / b;
+    qDebug() << "gain: ";
+    printf_matrix(gain);
+
     // 更新状态
     state = state + gain * (measure - measureModel.GetH() * state);
 
     // 更新误差协方差阵
-    Matrix I(gain.rowsize(), gain.rowsize());
-    for(size_t i = 0; i < gain.rowsize(); i++){
-        for(size_t j = 0; j < gain.rowsize(); j++){
-            I(i,j)=0.0;
-            if(i==j){
-                I(i,j) = 1.0;
-            }
-        }
-    }
+    Matrix I(9, 9, 0.0);
+    I.unit();
     covariance = (I - gain * measureModel.GetH()) * covariance;
 }
 

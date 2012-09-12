@@ -16,9 +16,9 @@ State::State(double x, double y, double z, double xx, double yy, double zz
     m[8][0] = zzz;
 	time = t;
 
-    // eat the memory...
-    a[125] = 'a';
-    a[2023] = 'a';
+    tmp[0] = 'a';
+    tmp[512] = 'a';
+    tmp[1023] = 'a';
 }
 
 State::State(const State &s):m(s.m), time(s.time)

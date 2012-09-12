@@ -7,10 +7,15 @@
 class SingleTarget
 {
 public:
-    SingleTarget(int i, const SystemModel m, State init):id(i), states(), model(m)
+    SingleTarget(int targetid, const SystemModel m, State init):id(targetid), states(), model(m)
     {
         State * s = new State(init);
         states.push_back(s);
+    }
+
+    SingleTarget(int targetid): id(targetid), states(), model()
+    {
+        ;
     }
 
     //拷贝构造函数

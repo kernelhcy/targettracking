@@ -59,5 +59,6 @@ public:
 private:
     Matrix m;
 	int time;
-    char a[2048]; // I think you understand this... ^v^
+
+    char tmp[1024];
 };

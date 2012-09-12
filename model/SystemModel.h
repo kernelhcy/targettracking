@@ -18,6 +18,7 @@ public:
 	/// Constructor
 	SystemModel(Matrix& f, Matrix& q);
     SystemModel(const SystemModel &m);
+    SystemModel();
 
 	/// Destructor
 	virtual ~SystemModel();

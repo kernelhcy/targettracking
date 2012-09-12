@@ -78,6 +78,6 @@ void SingleTarget::print()
 
 SingleTarget* SingleTarget::clone()
 {
-    SingleTarget *cpy = new SingleTarget(this->id, this->model, State());
+    SingleTarget *cpy = new SingleTarget(this->id, this->model, *getCurrState());
     return cpy;
 }

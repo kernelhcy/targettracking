@@ -45,6 +45,7 @@ Matrix MeasureModel::GetR()
 MeasureModel MeasureModel::getModel()
 {
     Matrix h(9, 9, 0.0), r(9, 9, 0.0);
+    h[0][0] = 1;
     h[1][1] = 1;
     h[2][2] = 1;
     h[3][3] = 1;
@@ -53,7 +54,7 @@ MeasureModel MeasureModel::getModel()
     h[6][6] = 1;
     h[7][7] = 1;
     h[8][8] = 1;
-    h[9][9] = 1;
+    r.unit();
 	MeasureModel model(h, r);
 	return model;
 }

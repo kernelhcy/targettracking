@@ -7,6 +7,9 @@ SystemModel::SystemModel(const SystemModel &m):F(m.F), Q(m.Q)
 {
 }
 
+SystemModel::SystemModel(): F(1, 1), Q(1, 1)
+{
+}
 
 // Destructor
 SystemModel::~SystemModel()
@@ -42,7 +45,9 @@ Matrix SystemModel::GetQ()
 
 SystemModel SystemModel::getModel(SystemModelType type)
 {
-    Matrix f(9, 9, 0.0), q(9, 9, 0.0);		// q是填充SystemModel中的量测模型，此处没有用处。
+    Matrix f(9, 9, 0.0), q(9, 9, 0.0);
+    q.unit();
+    q[2][3] = 5;
 	switch(type)
 	{
 	case SystemModel::CA:			// 匀速直线运动

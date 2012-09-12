@@ -5,7 +5,7 @@ void printf_matrix(const Matrix &m)
     size_t colno, rowno;
     colno = m.colno();
     rowno = m.rowno();
-    QTextStream out(stdout);
+    QTextStream out(stderr);
     for(size_t i = 0; i < rowno; ++i){
         for(size_t j = 0; j < colno; ++j){
             out << m[i][j] << "\t";

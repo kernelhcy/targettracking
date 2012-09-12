@@ -15,6 +15,7 @@ public:
 public:
     int targetId;       // 目标id
     int groupId;        // 目标所在的集群id
+    int time;           // 时间
     State state;        // 测量状态值
 };
 

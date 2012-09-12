@@ -20,6 +20,7 @@ protected:
 public:
     // 构造函数
 	KalmanFilter(SystemModel sm, MeasureModel mm);
+    KalmanFilter();
 
     // 析构函数
 	virtual ~KalmanFilter();
@@ -40,13 +41,25 @@ public:
     Matrix getCovariance() const{ return this->covariance; }
     Matrix getGain() const{ return this->gain; }
 
+    void setGroupId(int grpid) { groupId = grpid; }
+    void setTargetId(int targetid) {targetId = targetid;}
+    int getGroupId() const { return groupId; }
+    int getTargetId() const { return targetId; }
+
+    void setState(Matrix m){ state = m; }
 private:
+    // 对应的集群和目标id
+    int groupId;
+    int targetId;
+
 	SystemModel systemModel;
 	MeasureModel measureModel;
 
     Matrix state;       // 当前状态
     Matrix covariance;  // 误差的协方差阵
-    Matrix gain;        // 增益
+    Matrix gain;        // 增益 
+
+    void init();
 }; // class
 
 #endif // __KALMAN_FILTER__
