@@ -45,9 +45,8 @@ Matrix SystemModel::GetQ()
 
 SystemModel SystemModel::getModel(SystemModelType type)
 {
-    Matrix f(9, 9, 0.0), q(9, 9, 0.0);
-    q.unit();
-    q[2][3] = 5;
+    Matrix f(9, 9, 0.0), q(9, 9, 35.0);
+\
 	switch(type)
 	{
 	case SystemModel::CA:			// 匀速直线运动
@@ -90,5 +89,11 @@ SystemModel SystemModel::getModel(SystemModelType type)
 		break;
 	}
 
+    for (int i = 0; i < 9; ++i) {
+        for (int j = 0; j < 9; ++j) {
+            q[i][j] = 20;
+            if (i > j) q[i][j] = -20;
+        }
+    }
     return SystemModel(f, q);
 }

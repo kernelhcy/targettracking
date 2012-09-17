@@ -2,7 +2,7 @@
 #include <QDebug>
 #include "ttmap.h"
 
-SingleTargetView::SingleTargetView(SingleTarget *t): target(t), color(Qt::black)
+SingleTargetView::SingleTargetView(SingleTarget *t): target(t), color(Qt::black), isFiltedTarget(false)
 {
 }
 

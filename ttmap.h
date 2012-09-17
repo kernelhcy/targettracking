@@ -22,8 +22,8 @@ public:
     void mouseReleaseEvent(QMouseEvent *);
 
     // 所模拟的区域大小
-    const static int WIDTH = 10000;
-    const static int HEIGHT = 10000;
+    const static int WIDTH = 20000;
+    const static int HEIGHT = 20000;
 
 signals:
     // 目标位置更新是发送此信号

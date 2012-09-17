@@ -1,7 +1,7 @@
 #include "targettracker.h"
 #include <QDebug>
 
-TargetTracker::TargetTracker(): filters(), filtedTargetGrps()
+TargetTracker::TargetTracker(): filters(), filtedTargetGrps(), filtedTargetGrpsArray()
 {
 }
 
@@ -25,9 +25,11 @@ void TargetTracker::tracking(std::vector<TargetState> states)
     TargetState tState;
     KalmanFilter *filter;
     SingleTarget *target;
+    qDebug() << "测量值：";
     for (iter = states.begin(); iter != states.end(); ++iter)
     {
         tState = *iter;
+        tState.state.print();
 
         filter = findFilter(tState.groupId, tState.targetId);
         target = findTarget(tState.groupId, tState.targetId);
@@ -75,6 +77,7 @@ SingleTarget* TargetTracker::findTarget(int grpId, int targetId)
         // 没有找到对应的集群，创建一个新的集群.
         tg = new TargetGroup(grpId);
         filtedTargetGrps[grpId] = tg;
+        filtedTargetGrpsArray.push_back(tg);
     }
     SingleTarget *t = tg->getTargetByID(targetId);
     if (t == NULL) {
@@ -87,11 +90,16 @@ SingleTarget* TargetTracker::findTarget(int grpId, int targetId)
 
 void TargetTracker::printTargetGroups()
 {
+    qDebug() << "预测值：";
     TargetGroup *tg = NULL;
     std::map<int, TargetGroup*>::const_iterator iter;
     for (iter = filtedTargetGrps.begin(); iter != filtedTargetGrps.end(); ++iter)
     {
         tg = (iter -> second);
-        tg->print();
+        SingleTarget *t;
+        for (size_t i = 0; i < tg->getTargetCount(); ++i) {
+            t = tg->getTarget(i);
+            t->getCurrState()->print();
+        }
     }
 }

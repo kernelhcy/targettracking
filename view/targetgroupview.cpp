@@ -1,6 +1,6 @@
 #include "targetgroupview.h"
 
-TargetGroupView::TargetGroupView(TargetGroup *grp): group(grp), color(Qt::blue), views()
+TargetGroupView::TargetGroupView(TargetGroup *grp): group(grp), color(Qt::blue), views(), isFiltedGroup(false)
 {
     SingleTarget *t;
     int targetCount = group -> getTargetCount();
@@ -8,6 +8,7 @@ TargetGroupView::TargetGroupView(TargetGroup *grp): group(grp), color(Qt::blue),
         t = group -> getTarget(i);
         SingleTargetView *view = new SingleTargetView(t);
         view -> setColor(color);
+        view -> setFilted(isFiltedGroup);
         views.push_back(view);
     }
 }

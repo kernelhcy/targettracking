@@ -36,9 +36,20 @@ void TTMap::start()
     g_groups = groups;
     // 创建一个目标跟踪器
     targetTracker = new TargetTracker();
+    // 产生所有的跟踪目标
+    targetTracker->tracking(targetGenerator->getCurrentStates());
+    // 将过滤后的目标轨迹显示到界面上
+    groups = targetTracker->getTargetGroups();
+    for (iter = groups -> begin(); iter != groups -> end(); ++iter) {
+        TargetGroupView *v = new TargetGroupView(*iter);
+        v->setColor(QColor(255, 0, 0, 100));
+        v->setFilted(true);
+        views.append(v);
+        qDebug() << "Group id : " << (*iter) -> getID();
+    }
 
     // 启动定时器
-    timer.start(500);
+    timer.start(200);
     isTracking = true;
 }
 
@@ -97,7 +108,7 @@ void TTMap::mouseReleaseEvent(QMouseEvent *e)
         QListIterator<TargetGroupView*> i(views);
         while (i.hasNext()) {
             TargetGroupView *v = i.next();
-            v->setColor(QColor(0, 0, 255, 80));
+            v->setColor(QColor(0, 0, 255, 60));
             if (v->getTargetGroup() == g) {
                 v->setColor(QColor(255, 0, 0, 255));
             }
@@ -108,6 +119,10 @@ void TTMap::mouseReleaseEvent(QMouseEvent *e)
         while (i.hasNext()) {
             TargetGroupView *v = i.next();
             v->setColor(QColor(0, 0, 255, 255));
+            if (v->isFilted()) {
+                // 滤波产生的集群以浅色显示
+                v->setColor(QColor(255, 0, 0, 100));
+            }
         }
     }
     emit targetSelectet(g);
@@ -141,7 +156,7 @@ float TTMap::getTargetGroupDist(TargetGroup *grp, int x, int y)
     SingleTarget *t;
     State *s;
     float minDist = 0xffffffff, tmp;
-    for (int i = 0; i < grp->getTargetCount(); ++i) {
+    for (size_t i = 0; i < grp->getTargetCount(); ++i) {
         t = grp->getTarget(i);
         for (int j = 0; j < t->getStateCount(); ++j) {
             s = t->getState(j);

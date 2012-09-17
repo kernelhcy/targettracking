@@ -3,6 +3,7 @@
 
 #include "../model/TargetGroup.h"
 #include <map>
+#include <vector>
 #include "../model/State.h"
 #include "../model/TargetState.h"
 #include "filter/KalmanFilter.h"
@@ -25,9 +26,12 @@ public:
      */
     void tracking(std::vector<TargetState> states);
 
+    std::vector<TargetGroup*>* getTargetGroups(){ return &filtedTargetGrpsArray; }
+
 private:
     std::map<int, KalmanFilter*> filters;            // 滤波器
     std::map<int, TargetGroup*> filtedTargetGrps;    // 滤波后的集群目标， 全局变量g_filted_groups
+    std::vector<TargetGroup*> filtedTargetGrpsArray; // 集群目标数组。用于返回给外界。
 
     /**
      * @brief findFilter 查找目标对应的滤波器

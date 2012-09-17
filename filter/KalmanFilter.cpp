@@ -51,8 +51,8 @@ Matrix KalmanFilter::estimate()
     this->state = systemModel.GetF() * state;
     // 计算预测误差协方差
     this->covariance = systemModel.GetF() * (this->covariance) * (~systemModel.GetF()) + systemModel.GetQ();
-    qDebug() << "covariance: ";
-    printf_matrix(covariance);
+//    qDebug() << "covariance: ";
+//    printf_matrix(covariance);
     return this->state;
 }
 
@@ -62,8 +62,8 @@ void KalmanFilter::updateByMeasure(Matrix measure)
     Matrix a = covariance * (~measureModel.GetH());
     Matrix b = measureModel.GetH() * covariance * (~measureModel.GetH()) + measureModel.GetR();
     gain = a / b;
-    qDebug() << "gain: ";
-    printf_matrix(gain);
+//    qDebug() << "gain: ";
+//    printf_matrix(gain);
 
     // 更新状态
     state = state + gain * (measure - measureModel.GetH() * state);

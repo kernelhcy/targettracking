@@ -28,10 +28,13 @@ public:
 
     TargetGroup* getTargetGroup() const;
 
+    bool isFilted() { return isFiltedGroup; }
+    void setFilted(bool filted) { isFiltedGroup = filted; }
 private:
     TargetGroup *group;
     QColor color;
     std::vector<SingleTargetView*> views;
+    bool isFiltedGroup;     // 标记集群是否是滤波产生的。
 };
 
 #endif // TARGETGROUPVIEW_H

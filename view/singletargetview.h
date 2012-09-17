@@ -28,10 +28,12 @@ public:
     void setColor(QColor);
     QColor getColor();
 
+    bool isFilted(){ return isFiltedTarget; }
+    void setFilted(bool filted) { isFiltedTarget = filted; }
 private:
     SingleTarget *target;
     QColor color;
-
+    bool isFiltedTarget;        // 标记目标是否是滤波产生的
 };
 
 #endif // SINGLETARGETVIEW_H
