@@ -121,4 +121,5 @@ void MainWindow::splashScreenTimerHandler()
     showMaximized();
     splashScreen -> finish(this);
     delete splashScreen;
+    splashTimer.stop();
 }
