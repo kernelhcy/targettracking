@@ -69,6 +69,16 @@ void TTMap::stop()
     if (targetTracker) delete targetTracker;
 }
 
+void TTMap::pause(bool play)
+{
+    if (!isTracking) return;
+    if (play && !timer.isActive()) {
+        timer.start(200);
+    } else {
+        timer.stop();
+    }
+}
+
 /**
  * @brief TTMap::timeOutHandler
  * 超时处理函数。

@@ -24,6 +24,7 @@ public slots:
     void onSettingButtonClick();
     void onStartButtonToggled(bool);
     void onGroupInfoButtonClick();
+    void onPauseButtonToggled(bool);
 
     // 处理TTMap中，目标数据更新信号
     void targetsUpdateHandler();

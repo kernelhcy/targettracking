@@ -11,6 +11,7 @@ MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) :
     connect(ui->settingBtn, SIGNAL(clicked()), this, SLOT(onSettingButtonClick()));
     connect(ui->groupInfoBtn, SIGNAL(clicked()), this, SLOT(onGroupInfoButtonClick()));
     connect(ui->startBtn, SIGNAL(toggled(bool)), this, SLOT(onStartButtonToggled(bool)));
+    connect(ui->pauseBtn, SIGNAL(toggled(bool)), this, SLOT(onPauseButtonToggled(bool)));
 
     settingDialog = NULL;
     grpInfoWindow = NULL;
@@ -60,10 +61,18 @@ void MainWindow::onSettingButtonClick()
 void MainWindow::onStartButtonToggled(bool toggled)
 {
     if (toggled) {
+        if (ui->pauseBtn->isChecked()) ui->pauseBtn->toggle();
+        ui->pauseBtn->setEnabled(true);
+        ui->groupInfoBtn->setEnabled(true);
+        ui->settingBtn->setEnabled(false);
         ui->startBtn->setText("停止跟踪");
         map->start();
         qDebug() << "开始跟踪...";
     } else {
+        if (ui->pauseBtn->isChecked()) ui->pauseBtn->toggle();
+        ui->pauseBtn->setEnabled(false);
+        ui->groupInfoBtn->setEnabled(false);
+        ui->settingBtn->setEnabled(true);
         ui->startBtn->setText("开始跟踪");
         map->stop();
         qDebug() << "停止跟踪。";
@@ -71,6 +80,16 @@ void MainWindow::onStartButtonToggled(bool toggled)
         targetsUpdateHandler();
     }
     if (grpInfoWindow != NULL) grpInfoWindow->updateTable();
+}
+
+void MainWindow::onPauseButtonToggled(bool toggled)
+{
+    if (toggled) {
+        ui->pauseBtn->setText("开始");
+    } else {
+        ui->pauseBtn->setText("暂停");
+    }
+    map->pause(!toggled);
 }
 
 void MainWindow::onGroupInfoButtonClick()
