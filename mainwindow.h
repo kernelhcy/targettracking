@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QSplashScreen>
 #include "settingdialog.h"
 #include "model/TargetGroup.h"
 #include "grouplistwindow.h"
@@ -17,7 +18,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QSplashScreen *splashScreen, QWidget *parent = 0);
     ~MainWindow();
 public slots:
     void onSettingButtonClick();
@@ -29,12 +30,16 @@ public slots:
     // 处理TTMap中，有目标被选中的信号
     void targetSelectedHandler(TargetGroup *grp);
 
+    void splashScreenTimerHandler();
 private:
     Ui::MainWindow *ui;
 
     SettingDialog *settingDialog;
     GroupListWindow *grpInfoWindow;
     TTMap *map;
+
+    QSplashScreen *splashScreen;
+    QTimer splashTimer;
 
     TargetGroup *selectGrp;     // 选中的集群
     QLabel *idLabel, *tLabel;

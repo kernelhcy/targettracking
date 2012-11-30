@@ -3,9 +3,9 @@
 #include "model/singletarget.h"
 #include <QDebug>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), selectGrp(NULL),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) :
+    QMainWindow(parent), selectGrp(NULL), splashScreen(splash),
+    ui(new Ui::MainWindow), splashTimer(this)
 {
     ui->setupUi(this);
     connect(ui->settingBtn, SIGNAL(clicked()), this, SLOT(onSettingButtonClick()));
@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(map, SIGNAL(targetSelectet(TargetGroup*))
             , this, SLOT(targetSelectedHandler(TargetGroup*)));
     connect(map, SIGNAL(targetsUpdated()), this, SLOT(targetsUpdateHandler()));
+    connect(&splashTimer, SIGNAL(timeout()), this, SLOT(splashScreenTimerHandler()));
 
     idLabel = ui->idLabel;
     tLabel = ui->tLabel;
@@ -40,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //showMaximized();
     setMinimumSize(size());
     targetsUpdateHandler();
+    splashTimer.start(2000);
 }
 
 MainWindow::~MainWindow()
@@ -112,4 +114,11 @@ void MainWindow::targetsUpdateHandler()
         vyLabel->setText("0");
         vzLabel->setText("0");
     }
+}
+
+void MainWindow::splashScreenTimerHandler()
+{
+    showMaximized();
+    splashScreen -> finish(this);
+    delete splashScreen;
 }
