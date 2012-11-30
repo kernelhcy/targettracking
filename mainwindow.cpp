@@ -3,14 +3,15 @@
 #include "model/singletarget.h"
 #include <QDebug>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), selectGrp(NULL),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) :
+    QMainWindow(parent), selectGrp(NULL), splashScreen(splash),
+    ui(new Ui::MainWindow), splashTimer(this)
 {
     ui->setupUi(this);
     connect(ui->settingBtn, SIGNAL(clicked()), this, SLOT(onSettingButtonClick()));
     connect(ui->groupInfoBtn, SIGNAL(clicked()), this, SLOT(onGroupInfoButtonClick()));
     connect(ui->startBtn, SIGNAL(toggled(bool)), this, SLOT(onStartButtonToggled(bool)));
+    connect(ui->pauseBtn, SIGNAL(toggled(bool)), this, SLOT(onPauseButtonToggled(bool)));
 
     settingDialog = NULL;
     grpInfoWindow = NULL;
@@ -24,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(map, SIGNAL(targetSelectet(TargetGroup*))
             , this, SLOT(targetSelectedHandler(TargetGroup*)));
     connect(map, SIGNAL(targetsUpdated()), this, SLOT(targetsUpdateHandler()));
+    connect(&splashTimer, SIGNAL(timeout()), this, SLOT(splashScreenTimerHandler()));
 
     idLabel = ui->idLabel;
     tLabel = ui->tLabel;
@@ -40,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //showMaximized();
     setMinimumSize(size());
     targetsUpdateHandler();
+    splashTimer.start(2000);
 }
 
 MainWindow::~MainWindow()
@@ -58,10 +61,18 @@ void MainWindow::onSettingButtonClick()
 void MainWindow::onStartButtonToggled(bool toggled)
 {
     if (toggled) {
+        if (ui->pauseBtn->isChecked()) ui->pauseBtn->toggle();
+        ui->pauseBtn->setEnabled(true);
+        ui->groupInfoBtn->setEnabled(true);
+        ui->settingBtn->setEnabled(false);
         ui->startBtn->setText("停止跟踪");
         map->start();
         qDebug() << "开始跟踪...";
     } else {
+        if (ui->pauseBtn->isChecked()) ui->pauseBtn->toggle();
+        ui->pauseBtn->setEnabled(false);
+        ui->groupInfoBtn->setEnabled(false);
+        ui->settingBtn->setEnabled(true);
         ui->startBtn->setText("开始跟踪");
         map->stop();
         qDebug() << "停止跟踪。";
@@ -69,6 +80,16 @@ void MainWindow::onStartButtonToggled(bool toggled)
         targetsUpdateHandler();
     }
     if (grpInfoWindow != NULL) grpInfoWindow->updateTable();
+}
+
+void MainWindow::onPauseButtonToggled(bool toggled)
+{
+    if (toggled) {
+        ui->pauseBtn->setText("开始");
+    } else {
+        ui->pauseBtn->setText("暂停");
+    }
+    map->pause(!toggled);
 }
 
 void MainWindow::onGroupInfoButtonClick()
@@ -112,4 +133,12 @@ void MainWindow::targetsUpdateHandler()
         vyLabel->setText("0");
         vzLabel->setText("0");
     }
+}
+
+void MainWindow::splashScreenTimerHandler()
+{
+    showMaximized();
+    splashScreen -> finish(this);
+    delete splashScreen;
+    splashTimer.stop();
 }

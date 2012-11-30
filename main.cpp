@@ -1,6 +1,7 @@
 #include <QtGui/QApplication>
 #include <QTextCodec>
 #include <QTextStream>
+#include <QSplashScreen>
 #include "mainwindow.h"
 #include "comm.h"
 #include "model/singletarget.h"
@@ -14,9 +15,16 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF8"));
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF8"));
 
-    MainWindow w;
-    w.show();
-//    QTextStream out(stdout);
+    QSplashScreen* splash = new QSplashScreen;
+    splash -> setPixmap(QPixmap(":/images/images/splash.png"));
+    splash -> show();
+
+    Qt::Alignment bottomRight = Qt::AlignRight | Qt::AlignBottom;
+    splash -> showMessage(QObject::tr("加载中..."), bottomRight, Qt::white);
+
+    MainWindow w(splash);
+
+    //    QTextStream out(stdout);
 //    TargetGenerator generator(2, 3);
 //    generator.go(1);
 //    out << "current states : " << endl;

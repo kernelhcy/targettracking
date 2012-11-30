@@ -44,6 +44,9 @@ public slots:
     // 处理定时器的超时事件
     void timeOutHandler();
 
+    // 暂停
+    void pause(bool);
+
 private:
     TargetGenerator *targetGenerator;
     QList<TargetGroupView*> views;

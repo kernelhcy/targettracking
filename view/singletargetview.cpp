@@ -28,7 +28,8 @@ void SingleTargetView::draw(QPainter &painter, int margin, int width, int height
         }
 
         // 状态点超出屏幕范围
-        if (s->getPositionX() > TTMap::WIDTH || s->getPositionY() > TTMap::HEIGHT) continue;
+        if (s->getPositionX() > TTMap::WIDTH || s->getPositionY() > TTMap::HEIGHT
+                || s->getPositionX() < 0 || s->getPositionY() < 0 ) continue;
 
         painter.fillRect(x, y, w, h, QBrush(color, Qt::SolidPattern));
     }
