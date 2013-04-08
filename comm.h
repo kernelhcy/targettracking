@@ -26,4 +26,9 @@ extern bool isTracking;         // 是否正在进行跟踪。
 #define SETTING_SKY_TARGET_NUMBER_KEY       "sky target number"    // 空中集群数目
 #define SETTING_GROUND_TARGET_NUMBER_KEY    "ground target number" // 地面集群数目
 
+#define SETTING_FILE_PATH_KEY               "file path"             // 数据问文件路径
+
+#define SETTING_DATA_SOURCE_KEY             "data source"           // 目标数据源类型
+#define SETTING_DATA_SOURCE_FROM_FILE       1                       // 从文件读取目标数据
+#define SETTING_DATA_SOURCE_AUTO_GENERATE   2                       // 程序自动生成目数据
 #endif // COMM_H

@@ -2,6 +2,7 @@
 #define SETTINGDIALOG_H
 
 #include <QDialog>
+#include <QAbstractButton>
 
 namespace Ui {
 class SettingDialog;
@@ -24,6 +25,9 @@ public slots:
     void onSkyGroupNumberSpinValueChanged(int);
     void onGroundGroupNumberSpinValueChanged(int);
 
+    void onSelectFileBtnClick();
+    void onFromFileRadioButtonClick();
+    void onAutoGenRadioButtonClick();
 private:
     Ui::SettingDialog *ui;
 };
