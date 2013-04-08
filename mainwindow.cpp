@@ -135,9 +135,10 @@ void MainWindow::targetsUpdateHandler()
     }
 }
 
+//开场
 void MainWindow::splashScreenTimerHandler()
 {
-    showMaximized();
+    show();
     splashScreen -> finish(this);
     delete splashScreen;
     splashTimer.stop();

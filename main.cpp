@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     splash -> showMessage(QObject::tr("加载中..."), bottomRight, Qt::white);
 
     MainWindow w(splash);
-
+    return a.exec();
     //    QTextStream out(stdout);
 //    TargetGenerator generator(2, 3);
 //    generator.go(1);
@@ -46,5 +46,5 @@ int main(int argc, char *argv[])
 //    for (iter = states.begin(); iter != states.end(); ++iter) {
 //        (*iter).print(out);
 //    }
-    return a.exec();
+
 }

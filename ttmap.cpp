@@ -49,7 +49,7 @@ void TTMap::start()
     }
 
     // 启动定时器
-    timer.start(200);
+    timer.start(1000);
     isTracking = true;
 }
 
@@ -73,7 +73,7 @@ void TTMap::pause(bool play)
 {
     if (!isTracking) return;
     if (play && !timer.isActive()) {
-        timer.start(200);
+        timer.start(1000);
     } else {
         timer.stop();
     }
@@ -235,3 +235,5 @@ void TTMap::drawAxes(QPainter &painter)
         painter.setPen(oldpen);
     }
 }
+
+

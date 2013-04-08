@@ -8,6 +8,8 @@
 #include "../model/TargetState.h"
 #include "filter/KalmanFilter.h"
 #include "comm.h"
+#include<Winsock2.h>
+#pragma comment(lib,"ws2_32.lib")
 
 /**
  * @brief The TargetTracker class
@@ -54,6 +56,11 @@ private:
      * @brief printTargetGroups
      */
     void printTargetGroups();
+    void sentMessage(char *sendBuf);
+    void initMessage();
+    void initSocketClient();
+
+    SOCKET sockClient;
 };
 
 #endif // TARGETFILTER_H

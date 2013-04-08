@@ -1,5 +1,10 @@
-#include "targettracker.h"
+#include <stdlib.h>
+#include <stdio.h>
 #include <QDebug>
+#include "targettracker.h"
+#include<Winsock2.h>
+#pragma comment(lib,"ws2_32.lib")
+
 
 TargetTracker::TargetTracker(): filters(), filtedTargetGrps(), filtedTargetGrpsArray()
 {
@@ -24,8 +29,9 @@ void TargetTracker::tracking(std::vector<TargetState> states)
     std::vector<TargetState>::const_iterator iter;
     TargetState tState;
     KalmanFilter *filter;
-    SingleTarget *target;
+    SingleTarget *target;   
     qDebug() << "测量值：";
+
     for (iter = states.begin(); iter != states.end(); ++iter)
     {
         tState = *iter;
@@ -41,18 +47,17 @@ void TargetTracker::tracking(std::vector<TargetState> states)
             filter->setState(tState.state.getData());
             continue;
         }
-
-        // 计算一步预测值
+        //计算一步预测值
         Matrix matrix = filter->estimate();
         // 根据测量值更新预测数据
         filter->updateByMeasure(tState.state.getData());
-
         State s;
         s.setData(matrix);
         s.setTime(tState.time);
         target->addState(s);
     }
 
+    initMessage();
     printTargetGroups();
 }
 
@@ -102,4 +107,89 @@ void TargetTracker::printTargetGroups()
             t->getCurrState()->print();
         }
     }
+    closesocket(sockClient);
+    WSACleanup();
+}
+
+void TargetTracker::initMessage()
+{
+    char sendbuffer [10000]="a ";
+    char NumtoChar [30];
+    NumtoChar[0] = 0;
+    State* s;
+
+    itoa (filtedTargetGrpsArray.size(), NumtoChar, 10);
+    strcat (NumtoChar, " ");
+    strcat(sendbuffer, NumtoChar);
+
+    for(int i=0;i<filtedTargetGrpsArray.size();i++)
+    {
+        s = filtedTargetGrpsArray[i]->getTarget(0)->getCurrState();
+        itoa (s->getPositionX(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+        itoa (s->getPositionY(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+        itoa (s->getPositionZ(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+        itoa (s->getSpeedX(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+        itoa (s->getSpeedY(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+        itoa (s->getSpeedZ(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+        itoa (s->getAcceleratinX(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+        itoa (s->getAcceleratinY(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+        itoa (s->getAcceleratinZ(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+        itoa (s->getTime(), NumtoChar, 10);
+        strcat (NumtoChar, " ");
+        strcat(sendbuffer, NumtoChar);
+    }
+    sentMessage(sendbuffer);
+}
+
+void TargetTracker::sentMessage(char* sendBuf)
+{
+    send(sockClient,sendBuf,strlen(sendBuf)+1,0);
+    //int kk = strlen(sendBuf);
+    //char tmp[100000];
+    //recv(sockClient,tmp,100000,0);
+    //kk = strlen(tmp);
+    //printf ("%s\n", tmp);
+    //qDebug() << tmp;
+}
+
+void TargetTracker::initSocketClient()
+{
+    WORD wVersionRequested;
+    WSADATA wsaData;
+    int err;
+    wVersionRequested = MAKEWORD(1,1);
+    err = WSAStartup(wVersionRequested,&wsaData);
+    if(err!=0)
+    {
+        return;
+    }
+    if(LOBYTE(wsaData.wVersion) != 1 || HIBYTE(wsaData.wVersion) != 1 )
+    {
+        WSACleanup();
+        return;
+    }
+    sockClient = socket(AF_INET,SOCK_STREAM,0);
+    SOCKADDR_IN addrSrv;
+    addrSrv.sin_addr.S_un.S_addr = inet_addr("166.111.82.80");
+    addrSrv.sin_family = AF_INET;
+    addrSrv.sin_port = htons(6000);
+    connect(sockClient,(SOCKADDR*)&addrSrv,sizeof(SOCKADDR));
 }

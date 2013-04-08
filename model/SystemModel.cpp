@@ -49,7 +49,7 @@ SystemModel SystemModel::getModel(SystemModelType type)
 \
 	switch(type)
 	{
-	case SystemModel::CA:			// 匀速直线运动
+    case SystemModel::CA:			// 匀速直线运动
         f[0][0] = 1;
         f[0][3] = 1;
         f[1][1] = 1;
@@ -63,7 +63,7 @@ SystemModel SystemModel::getModel(SystemModelType type)
         f[7][7] = 1;
         f[8][8] = 1;
 		break;
-	case SystemModel::CV:			// 匀加速运动
+    case SystemModel::CV:			// 匀加速运动
         f[0][0] = 1;
         f[0][3] = 1;
         f[0][6] = 0.5;
