@@ -8,7 +8,7 @@
 
 TargetTracker::TargetTracker(): filters(), filtedTargetGrps(), filtedTargetGrpsArray()
 {
-
+    initSocketClient();
 }
 
 TargetTracker::~TargetTracker()
