@@ -8,7 +8,7 @@
 
 TargetTracker::TargetTracker(): filters(), filtedTargetGrps(), filtedTargetGrpsArray()
 {
-
+    initSocketClient();
 }
 
 TargetTracker::~TargetTracker()
@@ -32,7 +32,7 @@ void TargetTracker::tracking(std::vector<TargetState> states)
     std::vector<TargetState>::const_iterator iter;
     TargetState tState;
     KalmanFilter *filter;
-    SingleTarget *target;   
+    SingleTarget *target;
     qDebug() << "测量值：";
 
     for (iter = states.begin(); iter != states.end(); ++iter)
@@ -114,7 +114,7 @@ void TargetTracker::printTargetGroups()
 
 void TargetTracker::initMessage()
 {
-    char sendbuffer [10000]="a ";
+    char sendbuffer [100000]="a ";
     char NumtoChar [30];
     NumtoChar[0] = 0;
     State* s;
@@ -189,7 +189,7 @@ void TargetTracker::initSocketClient()
     }
     sockClient = socket(AF_INET,SOCK_STREAM,0);
     SOCKADDR_IN addrSrv;
-    addrSrv.sin_addr.S_un.S_addr = inet_addr("166.111.82.80");
+    addrSrv.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
     addrSrv.sin_family = AF_INET;
     addrSrv.sin_port = htons(6000);
     connect(sockClient,(SOCKADDR*)&addrSrv,sizeof(SOCKADDR));
