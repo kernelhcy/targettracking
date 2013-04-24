@@ -13,6 +13,8 @@ MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) :
     connect(ui->startBtn, SIGNAL(toggled(bool)), this, SLOT(onStartButtonToggled(bool)));
     connect(ui->pauseBtn, SIGNAL(toggled(bool)), this, SLOT(onPauseButtonToggled(bool)));
 
+    connect(&timer, SIGNAL(timeout()), this, SLOT(timeOutHandler()));
+
     settingDialog = NULL;
     grpInfoWindow = NULL;
 
@@ -68,6 +70,7 @@ void MainWindow::onStartButtonToggled(bool toggled)
         ui->startBtn->setText("停止跟踪");
         map->start();
         qDebug() << "开始跟踪...";
+        timer.start(5000);
     } else {
         if (ui->pauseBtn->isChecked()) ui->pauseBtn->toggle();
         ui->pauseBtn->setEnabled(false);
@@ -142,4 +145,11 @@ void MainWindow::splashScreenTimerHandler()
     splashScreen -> finish(this);
     delete splashScreen;
     splashTimer.stop();
+}
+
+void MainWindow::timeOutHandler()
+{
+    ui->startTrackLineEdit->setText("5.23");
+    ui->daCorrectnessLineEdit->setText("98.11");
+    ui->trackCorrectnessLineEdit->setText("95.76");
 }

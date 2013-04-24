@@ -32,6 +32,8 @@ public slots:
     void targetSelectedHandler(TargetGroup *grp);
 
     void splashScreenTimerHandler();
+
+    void timeOutHandler();
 private:
     Ui::MainWindow *ui;
 
@@ -47,6 +49,8 @@ private:
     QLabel *vxLabel, *sxLabel, *axLabel;
     QLabel *vyLabel, *syLabel, *ayLabel;
     QLabel *vzLabel, *szLabel, *azLabel;
+
+    QTimer timer;
 };
 
 #endif // MAINWINDOW_H

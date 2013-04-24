@@ -494,7 +494,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>关联概率正确性：</string>
+         <string>关联概率正确率：</string>
         </property>
        </widget>
       </item>
