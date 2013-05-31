@@ -68,10 +68,11 @@ void TargetGenerator::go(int time)
     if (isFromFile) {
         // 从文件读取目标数据
         std::vector<State> states = dateReader -> getNextStates();
-        TargetGroup *grp = groups[0];   //只有一个集群
+        TargetGroup *grp;   //只有一个集群
         SingleTarget *target;
         for (size_t i = 0; i < states.size(); ++i) {
-            target = grp -> getTarget(i);
+            grp = groups[i];
+            target = grp->getTarget(0);
             if (target) {
                 target -> addState(states[i]);
             }
@@ -96,13 +97,22 @@ void TargetGenerator::initGroups()
     if (isFromFile) {
         // 从文件读取目标数据
         std::vector<State> states = dateReader -> getNextStates();
-        TargetGroup *grp = new TargetGroup(groupId * 1000); // 所有的目标放到一个集群中
+//        TargetGroup *grp = new TargetGroup(groupId * 1000); // 所有的目标放到一个集群中
+//        SingleTarget *target;
+//        for (size_t i = 0; i < states.size(); ++i) {
+//            target = new SingleTarget(groupId * 1000 + i, SystemModel::getModel(SystemModel::CV), states[i]);
+//            grp -> addTarget(target);
+//        }
+//        groups.push_back(grp);
+        TargetGroup *grp;
         SingleTarget *target;
-        for (size_t i = 0; i < states.size(); ++i) {
-            target = new SingleTarget(groupId * 1000 + i, SystemModel::getModel(SystemModel::CV), states[i]);
+        for(size_t i = 0; i < states.size();i++){
+            grp = new TargetGroup(groupId * 1000);
+            target = new SingleTarget(groupId * 1000+1,SystemModel::getModel(SystemModel::CV), states[i]);
             grp -> addTarget(target);
+            groups.push_back(grp);
+            groupId ++;
         }
-        groups.push_back(grp);
     } else {
         // 自动生成目标数据
         // 地面集群
@@ -184,12 +194,19 @@ TargetDataReader::TargetDataReader(QString path): filePath(path), file(path)
     file.open(QIODevice::ReadOnly);
     QTextStream stream(&file);
     QString line;
+    QVector<QString> *dv = new QVector<QString>;
     while(true) {
         line = stream.readLine();
         if (line.isNull()) {
             break;
         }
-        dataVector.push_back(line);
+        else if (line.contains("=")){
+            allDataVector.push_back(dv);
+            dv = new QVector<QString>;
+        }
+        else{
+            dv->push_back(line);
+        }
         qDebug() << line;
     };
 
@@ -205,17 +222,29 @@ TargetDataReader::~TargetDataReader()
 std::vector<State> TargetDataReader::getNextStates()
 {
     std::vector<State> re;
-    if (dataVector.size() > 0) {
-        QString line = dataVector.front();
-        State s = createStateFromLine(line);
-        if (re.size() == 0) {
-            re.push_back(s);
-            dataVector.pop_front();
-        } else {
-            State preState = re.back();
-            if (preState.getTime() == s.getTime()) {
+    QVector<QString> *dv;
+    QString line;
+    if (allDataVector.at(0)->size() > 0) {
+//        QString line = dataVector.front();
+//        State s = createStateFromLine(line);
+//        if (re.size() == 0) {
+//            re.push_back(s);
+//            dataVector.pop_front();
+//        } else {
+//            State preState = re.back();
+//            if (preState.getTime() == s.getTime()) {
+//                re.push_back(s);
+//                dataVector.pop_front();
+//            }
+//        }
+        for(int i = 0; i < allDataVector.size();i++)
+        {
+            dv = allDataVector[i];
+            if(dv->size() > 0){
+                line = dv->front();
+                State s = createStateFromLine(line);
                 re.push_back(s);
-                dataVector.pop_front();
+                dv->pop_front();
             }
         }
     }
@@ -242,11 +271,11 @@ State TargetDataReader::createStateFromLine(QString line)
     vy = tmp.toFloat();
     State s;
     s.setTime((int)(id * 1000));
-    s.setPositionX(x * 30);
-    s.setPositionY(y * 200);
+    s.setPositionX(x*100);
+    s.setPositionY(y*100);
     s.setPositionZ(0);
-    s.setSpeedX(vx * 30);
-    s.setSpeedY(vy * 200);
+    s.setSpeedX(vx*100);
+    s.setSpeedY(vy*100);
     s.setSpeedZ(0);
     s.setAcceleratinX(0).setAcceleratinY(0).setAcceleratinZ(0);
 
