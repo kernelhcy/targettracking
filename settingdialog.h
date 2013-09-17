@@ -3,6 +3,9 @@
 
 #include <QDialog>
 #include <QAbstractButton>
+#include <QCheckBox>
+#include <QVector>
+#include <QString>
 
 namespace Ui {
 class SettingDialog;
@@ -28,8 +31,14 @@ public slots:
     void onSelectFileBtnClick();
     void onFromFileRadioButtonClick();
     void onAutoGenRadioButtonClick();
+
+    void kalmanFileterCheckboxStateChanged(int);
+    void ekalmanFileterCheckboxStateChanged(int);
+    void ukalmanFileterCheckboxStateChanged(int);
+    void particalFileterCheckboxStateChanged(int);
 private:
     Ui::SettingDialog *ui;
+    QVector<QString> filters;
 };
 
 #endif // SETTINGDIALOG_H

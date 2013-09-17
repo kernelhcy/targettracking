@@ -36,8 +36,6 @@ public slots:
     void timeOutHandler();
 private:
     Ui::MainWindow *ui;
-
-    SettingDialog *settingDialog;
     GroupListWindow *grpInfoWindow;
     TTMap *map;
 

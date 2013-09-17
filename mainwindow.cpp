@@ -14,8 +14,6 @@ MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) :
     connect(ui->pauseBtn, SIGNAL(toggled(bool)), this, SLOT(onPauseButtonToggled(bool)));
 
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeOutHandler()));
-
-    settingDialog = NULL;
     grpInfoWindow = NULL;
 
     map = new TTMap();
@@ -54,10 +52,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::onSettingButtonClick()
 {
-    if (settingDialog == NULL) {
-        settingDialog = new SettingDialog(this);
-    }
-    settingDialog->show();
+    SettingDialog SettingDialog(this);
+    SettingDialog.exec();
 }
 
 void MainWindow::onStartButtonToggled(bool toggled)
