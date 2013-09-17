@@ -25,6 +25,7 @@ private:
     QString filePath;
     QFile file;
     QVector<QString> dataVector;
+    QVector<QVector<QString>* > allDataVector;
 
     State createStateFromLine(QString line);
 
