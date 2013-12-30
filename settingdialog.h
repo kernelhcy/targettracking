@@ -32,6 +32,9 @@ public slots:
     void onFromFileRadioButtonClick();
     void onAutoGenRadioButtonClick();
 
+    void onLocalRadioButtonClick();
+    void onRemoteRadioButtonClick();
+
     void kalmanFileterCheckboxStateChanged(int);
     void ekalmanFileterCheckboxStateChanged(int);
     void ukalmanFileterCheckboxStateChanged(int);

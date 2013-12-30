@@ -18,6 +18,9 @@ SettingDialog::SettingDialog(QWidget *parent) :
     connect(ui->fromFileRBtn, SIGNAL(clicked()),this, SLOT(onFromFileRadioButtonClick()));
     connect(ui->autoGenerateRBtn, SIGNAL(clicked()),this, SLOT(onAutoGenRadioButtonClick()));
 
+    connect(ui->localRadioButton, SIGNAL(clicked()),this, SLOT(onLocalRadioButtonClick()));
+    connect(ui->remoteRadioButton, SIGNAL(clicked()),this, SLOT(onRemoteRadioButtonClick()));
+
     connect(ui -> kalmanCB, SIGNAL(stateChanged(int)), this, SLOT(kalmanFileterCheckboxStateChanged(int)));
     connect(ui -> ekalmanCB, SIGNAL(stateChanged(int)), this, SLOT(ekalmanFileterCheckboxStateChanged(int)));
     connect(ui -> ukalmanCB, SIGNAL(stateChanged(int)), this, SLOT(ukalmanFileterCheckboxStateChanged(int)));
@@ -95,6 +98,13 @@ void SettingDialog::onOkButtonClick()
         settings.setValue(SETTING_DATA_SOURCE_KEY, SETTING_DATA_SOURCE_AUTO_GENERATE);
     }
 
+    if(ui->localRadioButton->isChecked()){
+        settings.setValue(SETTING_TRANSMIT_IP,"127.0.0.1");
+    }
+    else{
+        settings.setValue(SETTING_TRANSMIT_IP,ui->remoteipEdit->text().trimmed());
+    }
+
     this->accept();
 }
 void SettingDialog::onResetButtonClick()
@@ -151,6 +161,16 @@ void SettingDialog::onAutoGenRadioButtonClick()
 {
     ui->fromFileGroupBox->setEnabled(false);
     ui->autoGenerateGroupBox->setEnabled(true);
+}
+
+void SettingDialog::onLocalRadioButtonClick()
+{
+    ui->remoteipEdit->setEnabled(false);
+}
+
+void SettingDialog::onRemoteRadioButtonClick()
+{
+    ui->remoteipEdit->setEnabled(true);
 }
 
 void SettingDialog::kalmanFileterCheckboxStateChanged(int state)

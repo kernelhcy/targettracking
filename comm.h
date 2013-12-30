@@ -26,6 +26,8 @@ extern bool isTracking;         // 是否正在进行跟踪。
 #define SETTING_SKY_TARGET_NUMBER_KEY       "sky target number"    // 空中集群数目
 #define SETTING_GROUND_TARGET_NUMBER_KEY    "ground target number" // 地面集群数目
 
+#define SETTING_TRANSMIT_IP                 "ip"
+
 #define SETTING_KALMAN_FILTER_KEY           "kalman filter"
 #define SETTING_EKALMAN_FILTER_KEY          "ekalman filter"
 #define SETTING_UKALMAN_FILTER_KEY          "ukalman filter"

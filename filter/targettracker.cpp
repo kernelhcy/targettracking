@@ -2,12 +2,16 @@
 #include <stdio.h>
 #include <QDebug>
 #include "targettracker.h"
-#include<Winsock2.h>
+#include <Winsock2.h>
+#include <QSettings>
+#include <iostream>
+
 #pragma comment(lib,"ws2_32.lib")
 
 
 TargetTracker::TargetTracker(): filters(), filtedTargetGrps(), filtedTargetGrpsArray()
 {
+    //项目验收后去掉
     initSocketClient();
 }
 
@@ -23,6 +27,7 @@ TargetTracker::~TargetTracker()
     {
         delete (iter -> second);
     }
+    //项目验收后去掉
     closesocket(sockClient);
     WSACleanup();
 }
@@ -60,7 +65,9 @@ void TargetTracker::tracking(std::vector<TargetState> states)
         target->addState(s);
     }
 
+    //项目验收后去掉
     initMessage();
+
     printTargetGroups();
 }
 
@@ -189,7 +196,12 @@ void TargetTracker::initSocketClient()
     }
     sockClient = socket(AF_INET,SOCK_STREAM,0);
     SOCKADDR_IN addrSrv;
-    addrSrv.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+    QSettings settings(SETTING_ORGANIZATION, SETTING_APPLICATION);
+    QString str = settings.value(SETTING_TRANSMIT_IP,"").toString();
+    QByteArray ba = str.toLatin1();
+    const char *ip = ba.data();
+    //std::cout<<ip<<std::endl;
+    addrSrv.sin_addr.S_un.S_addr = inet_addr(ip);
     addrSrv.sin_family = AF_INET;
     addrSrv.sin_port = htons(6000);
     connect(sockClient,(SOCKADDR*)&addrSrv,sizeof(SOCKADDR));
